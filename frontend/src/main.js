@@ -20,6 +20,7 @@ library.add(fal);
 library.add(fad);
 
 // Import pages/components
+import App from "./App";
 import HomePage from '@/pages/HomePage'
 import AppPage from '@/pages/AppPage'
 import CreatePage from "./pages/CreatePage";
@@ -44,4 +45,5 @@ const router = new VueRouter({
 
 new Vue({
   router,
+  render: h => h(App)
 }).$mount('#app');
