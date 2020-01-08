@@ -13,11 +13,11 @@ var app = express();
 
 // set up database connection
 const dbUrl = "mongodb://" + config.dbUser + ":" + config.dbPass + "@" + config.dbUrl;
-mongoose.connect(dbUrl, { useNewUrlParser: true, useMongoClient: true });
-let db = mongoose.connection;
+mongoose.connect(dbUrl, { useMongoClient: true });
+const db = mongoose.connection;
 db.on('error', console.error.bind(console, 'connection error:'));
-db.once('open', (msg) => {
-  console.log(msg)
+db.once('open', () => {
+  console.log("Database connected successfully.")
 });
 
 // view engine setup
