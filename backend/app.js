@@ -3,11 +3,22 @@ var express = require('express');
 var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
+const mongoose = require('mongoose');
+const config = require('./config');
 
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
 
 var app = express();
+
+// set up database connection
+const dbUrl = "mongodb://" + config.dbUser + ":" + config.dbPass + "@" + config.dbUrl;
+mongoose.connect(dbUrl, { useNewUrlParser: true, useMongoClient: true });
+let db = mongoose.connection;
+db.on('error', console.error.bind(console, 'connection error:'));
+db.once('open', (msg) => {
+  console.log(msg)
+});
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
