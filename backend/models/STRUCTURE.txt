@@ -1,0 +1,35 @@
+Basic diagram showing the hierarchy of models.
+
+ +--------------------+          +-----------------+         +-------------------------+
+ | ORGANISATION MODEL |--------->| BASE USER MODEL |         | SERVICE MODEL           |
+ | - i.e. the Uni     |          | - used for auth |         | - i.e. police, amb, etc |
+ +--------------------+          +-----------------+         +-------------------------+
+           |                          ^       ^                           |
+           |                          |       |                           |
+           |                          |       |                           |
+           |                          |       |                           |
+          /|\                         |       |                          /|\
+ +--------------------------+         |       |              +-------------------------+
+ | PROFILE ICE MODEL        |         |       |              | PROFILE SERVICE MODEL   |
+ | - student profile        |---------+       +--------------| - exists for future use |
+ | - stores their details,  |                                +-------------------------+
+ |   and their ice contacts |                                         \|/
+ +--------------------------+                                          |
+             \|/                                                       |
+              |                                                        |
+              |                                                        |
+              |                  +---------------------+               |
+              |                 /| ACTION LOG MODEL    |\              |
+              +------------------| - stores the action |---------------+
+                                \|   done by a user.   |/
+                                 +---------------------+
+
+The base user is used for authentication purposes and therefore is used by every user type.
+Organisations are their own model and have an array of users as owners and staff. These users can edit the model.
+Service model is simply categories different types of service-users.
+ICE users (students) have exactly one base user model and belong to an organisation.
+SERVICE users (police, amb, etc.) have exactly one base user model and belong to a service.
+Action Log is a model that stores everything done by a SERVICE user to a ICE user and what that action was.
+
+There will be an "application" model eventually which stores all the admins of the application, those who can edit the
+other models.

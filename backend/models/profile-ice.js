@@ -56,7 +56,7 @@ let contactSchema = new mongoose.Schema({
     }
 },{ _id : false, timestamps: true });
 
-let profileSchema = new mongoose.Schema({
+let profileIceSchema = new mongoose.Schema({
     user: userModel,
     forename: {
         type: String,
@@ -77,7 +77,7 @@ let profileSchema = new mongoose.Schema({
         required: true
     },
     contacts: [contactSchema],
-    organisation: orgModel
+    organisation: [orgModel]  // ICE users can belong to multiple organisations. In this implementation, there's only one org.
 },{ timestamps: true });
 
-module.exports = mongoose.model('Profile', profileSchema);
+module.exports = mongoose.model('ProfileICE', profileIceSchema);

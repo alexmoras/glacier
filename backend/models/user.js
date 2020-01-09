@@ -20,10 +20,6 @@ let userSchema = new mongoose.Schema({
     salt: {
         type: String,
         required: true
-    },
-    role: {  // user (ice user) | service (pol, amb, etc.) | org (owner)
-        type: String,
-        required: true
     }
 },{ timestamps: true });
 
