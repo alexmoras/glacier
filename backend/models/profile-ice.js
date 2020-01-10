@@ -1,16 +1,6 @@
 let mongoose = require('mongoose');
-let userModel = require('./user');
-let orgModel = require('./organisation');
 
 // Used by the standard users, the ones that want to store their ICE details.
-
-let phoneSchema = new mongoose.Schema({
-    phone: {
-        type: String,
-        unique: false,
-        required: true
-    }
-},{ _id : false, timestamps: true });
 
 let addressSchema = new mongoose.Schema({
     line1: {
@@ -48,7 +38,7 @@ let contactSchema = new mongoose.Schema({
         type: String,
         required: true
     },
-    phone: [phoneSchema],
+    phone: [String],
     address: [addressSchema],
     relationship: {
         type: String,
@@ -57,7 +47,11 @@ let contactSchema = new mongoose.Schema({
 },{ _id : false, timestamps: true });
 
 let profileIceSchema = new mongoose.Schema({
-    user: userModel,
+    user: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'User',
+        unique: true
+    },
     forename: {
         type: String,
         required: true
@@ -70,14 +64,17 @@ let profileIceSchema = new mongoose.Schema({
         type: Date,
         required: true,
     },
-    phone: [phoneSchema],
+    phone: [String],
     address: [addressSchema],
     medical: {
         type: String,
         required: true
     },
     contacts: [contactSchema],
-    organisation: [orgModel]  // ICE users can belong to multiple organisations. In this implementation, there's only one org.
+    organisation: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Organisation'
+    }  // ICE users can belong to multiple organisations. In this implementation, there's only one org.
 },{ timestamps: true });
 
-module.exports = mongoose.model('ProfileICE', profileIceSchema);
+module.exports = mongoose.model('ICEProfile', profileIceSchema);

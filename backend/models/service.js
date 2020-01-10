@@ -13,4 +13,4 @@ let serviceSchema = mongoose.Schema({
     contact: String
 });
 
-module.exports = mongoose.Model('Service', serviceSchema);
+module.exports = mongoose.model('Service', serviceSchema);
