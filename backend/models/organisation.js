@@ -1,6 +1,6 @@
 let mongoose = require('mongoose');
 
-// Organisation class that allows for multi-site hosting.
+// Organisation specific configuration.
 
 let orgSchema = new mongoose.Schema({
     uniqueName: {
@@ -20,7 +20,7 @@ let orgSchema = new mongoose.Schema({
     staff: [{
         type: mongoose.Schema.Types.ObjectId,
         ref: 'User'
-    }],  // All staff who have admin (non-delete) rights.
+    }],  // All staff who have "service user" rights.
     techContact: String,  // Email for logs, etc.
     publicContact: String  // Email for customer service.
 },{ timestamps: true });

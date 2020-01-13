@@ -1,6 +1,6 @@
 let mongoose = require('mongoose');
 
-// Used by the standard users, the ones that want to store their ICE details.
+// Used by the standard users, the ones that want to store their ICE details and those with an organisation email.
 
 let addressSchema = new mongoose.Schema({
     line1: {
@@ -46,11 +46,10 @@ let contactSchema = new mongoose.Schema({
     }
 },{ _id : false, timestamps: true });
 
-let profileIceSchema = new mongoose.Schema({
+let userSchema = new mongoose.Schema({
     user: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'User',
-        unique: true
+        ref: 'User'
     },
     forename: {
         type: String,
@@ -74,7 +73,7 @@ let profileIceSchema = new mongoose.Schema({
     organisation: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Organisation'
-    }  // ICE users can belong to multiple organisations. In this implementation, there's only one org.
+    }
 },{ timestamps: true });
 
-module.exports = mongoose.model('ICEProfile', profileIceSchema);
+module.exports = mongoose.model('IceUser', userSchema);
