@@ -8,6 +8,7 @@ const config = require('./config');
 var app = express();
 
 // Routers
+var apiRouter = require('./routes/api');  // Provides a JSON route for API.
 var authRouter = require('./routes/auth');
 var usersRouter = require('./routes/users');
 
@@ -30,6 +31,7 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
+app.use('/', apiRouter);
 app.use('/auth', authRouter);
 app.use('/users', usersRouter);
 

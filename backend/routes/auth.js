@@ -11,51 +11,46 @@ router.post('/login', (req, res, next) => {
     // If user doesn't exist in DB, return error BUT show prompt allowing them to register with same details.
     let email = escape(req.body.email);
     let recaptcha = escape(req.body.recaptcha);
-    User.findOne({ email: [email] }, (err, user) => {
-        if (err) {
-            // Database error!
+    User.findOne({ email: [email] })
+        .then((user) => {
+            if(!user) {
+                return res.status(401).send({
+                    "success": false,
+                    "status": 404,  // The status codes tend to follow HTTP codes, in this case user is Not Found (404)
+                    "message": "A user with that email address was not found."
+                });
+            }
+            if (!recaptcha) {
+                return res.status(401).send({
+                    "success": false,
+                    "status": 401,
+                    "message": "The recaptcha was below the threshold."
+                });
+            }
+            let token = new EmailToken();
+            token.user = user.id;
+            token.email = email;
+            token.save()
+                .then((token) => {
+                    res.status(202).send({
+                        "success": true,
+                        "status": 202,
+                        "message": "Magic link has been sent to the email address provided. Please close this page."
+                    });
+                    console.log(token.id);
+                })
+                .catch((err) => {
+                    throw new Error("Token Error: " + err);
+                });
+        })
+        .catch((err) => {
             console.log("Login error: " + err);
             res.status(500).send({
+                "success": false,
                 "status": 500,
                 "message": "An unknown error has occurred during user login. Please try again later."
             });
-        } else {
-            if (!user) {
-                // No user found!
-                res.status(401).send({
-                    "status": 401,
-                    "message": "The email and password combination was not recognised. Please check and try again."
-                });
-            } else {
-                if(!recaptcha){
-                    // Oops, captcha didn't match!
-                    res.status(401).send({
-                        "status": 401,
-                        "message": "The reCaptcha was incorrect. Please try again."
-                    });
-                } else {
-                    let token = new EmailToken();
-                    token.user = user.id;
-                    token.email = email;
-                    token.save((err, token) => {
-                        if(err){
-                            res.status(500).send({
-                                "status": 500,
-                                "message": "An unknown error has occurred during user login. Please try again later."
-                            });
-                            console.log(err);
-                        } else {
-                            res.status(202).send({
-                                "status": 202,
-                                "message": "Magic link has been sent to the email address provided. Please close this page."
-                            });
-                            console.log(token.id);
-                        }
-                    });
-                }
-            }
-        }
-    });
+        });
 });
 
 router.post('/register', (req, res, next) => {
@@ -67,69 +62,61 @@ router.post('/token', (req, res, next) => {
     // Exchange magic token for JWT
     // Check token exists, then check user has email - if not, add email to user (acts as a "verified" check) then login.
     let token = escape(req.body.token);
-    EmailToken.findById(token, (err, token) => {
-        if(err) {
-            // Database error!
-            console.log("Token error: " + err);
-            res.status(500).send({
-                "status": 500,
-                "message": "An unknown error has occurred during user login. Please try again later."
-            });
-        } else if (!token) {
-            // No token found!
-            res.status(401).send({
-                "status": 401,
-                "message": "The token was not found."
-            });
-        } else {
-            User.findById(token.user, (err, user) => {
-                if(err) {
-                    // Database error!
-                    console.log("User error: " + err);
-                    res.status(500).send({
-                        "status": 500,
-                        "message": "An unknown error has occurred during user login. Please try again later."
-                    });
-                } else if (!user) {
-                    res.status(401).send({
-                        "status": 401,
-                        "message": "The user was not found."
-                    });
-                } else {
-                    let tokenExpires = token.createdAt;
-                    tokenExpires.setHours(tokenExpires.getHours() + config.magicLinkExpiration);
-                    if (Date.now() > tokenExpires) {
-                        res.status(401).send({
-                            "status": 401,
-                            "message": "Token has expired."
+    EmailToken.findById(token)
+        .then((token) => {
+            if (!token) {
+                // No token found!
+                return res.status(401).send({
+                    "success": false,
+                    "status": 404,
+                    "message": "The token was not found."
+                });
+            }
+            User.findById(token.user)
+                .then((user) => {
+                    if (!user) {
+                        res.status(410).send({
+                            "success": false,
+                            "status": 410,  // User is GONE. It existed when the token was created but has since been deleted.
+                            "message": "The user was not found."
                         });
                     } else {
-                        if (!user.email.includes(token.email)) {
-                            user.email.push(token.email);
-                        }
-                        jwt.sign('payload', config.jwtPrivateKey, (err, jwtoken) => {
-                            if (err) {
-                                console.log("JWT error: " + err);
-                                res.status(500).send({
-                                    "status": 500,
-                                    "message": "An unknown error has occurred during token generation. Please try again later."
-                                });
-                            } else {
-                                // GENERATE JWT HERE!!!
-                                res.status(200).send({
-                                    "status": 200,
-                                    "message": "Here is the JWT..."
-                                });
+                        let tokenExpires = token.createdAt;
+                        tokenExpires.setHours(tokenExpires.getHours() + config.magicLinkExpiration);
+                        if (Date.now() > tokenExpires) {
+                            res.status(401).send({
+                                "success": false,
+                                "status": 401,
+                                "message": "Token has expired."
+                            });
+                        } else {
+                            if (!user.email.includes(token.email)) {
+                                user.email.push(token.email);
                             }
-                        });
+                            let jwtoken = jwt.sign('payload', config.jwtPrivateKey);
+                            res.status(200).send({
+                                "success": true,
+                                "status": 200,
+                                "message": "Token found, JWT has been generated.",
+                                "token": jwtoken
+                            });
+                        }
                     }
-                    console.log(Date.now());
-                    console.log(tokenExpires);
                     token.remove();
-                }
-            });
-        }
-    });
+                })
+                .catch((err) => {
+                    throw new Error("User Error: " + err);
+                })
+        })
+        .catch((err) => {
+            // Database error!
+            console.log(err);
+            res.status(500).send({
+                "success": false,
+                "status": 500,
+                "message": "An unknown error has occurred during user login. Please try again later."
+            })
+        });
 });
 
 /* SSO HANDLER */
