@@ -5,42 +5,18 @@ var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 const mongoose = require('mongoose');
 const config = require('./config');
-var bcrypt = require('bcrypt');
 var app = express();
 
 // Routers
 var authRouter = require('./routes/auth');
 var usersRouter = require('./routes/users');
 
-// Import models for use with database seeding
-let User = require('./models/user');
-let Organisation = require('./models/organisation');
-let Service = require('./models/service');
-let ICEProfile = require('./models/profile-ice');
-let ServiceProfile = require('./models/profile-service');
-let ActionLog = require('./models/action-log');
-
 // set up database connection
 const dbUrl = "mongodb://" + config.dbUser + ":" + config.dbPass + "@" + config.dbUrl;
-mongoose.connect(dbUrl, { useMongoClient: true });
+mongoose.connect(dbUrl, { useNewUrlParser: true, useUnifiedTopology: true });
 const db = mongoose.connection;
 db.on('error', console.error.bind(console, 'connection error:'));
 db.once('open', () => {
-  let user = new User();
-  user.email = ["user@glacier.alexmoras.com"];
-  user.hash = bcrypt.hashSync("hashbrowns", 10);
-  console.log(user.hash);
-  user.save();
-  console.log(user._id);
-  let org = new Organisation();
-  org.uniqueName = "neworg";
-  org.displayName = "New Organisation";
-  org.domain = "myneworg.com";
-  org.owner = [user.id];
-  org.staff = [user.id];
-  org.techContact = "admin@" + org.domain;
-  org.publicContact = "contact@" + org.domain;
-  org.save();
   console.log("Database connected successfully.");
 });
 
