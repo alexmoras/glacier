@@ -5,6 +5,7 @@ var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 const mongoose = require('mongoose');
 const config = require('./config');
+const payload = require('./helpers/jwt-payload');
 var app = express();
 
 // Routers
@@ -13,8 +14,8 @@ var authRouter = require('./routes/auth');
 var usersRouter = require('./routes/users');
 
 // set up database connection
-const dbUrl = "mongodb://" + config.dbUser + ":" + config.dbPass + "@" + config.dbUrl;
-mongoose.connect(dbUrl, { useNewUrlParser: true, useUnifiedTopology: true });
+const dbUrl = "mongodb://" + config.db.user + ":" + config.secret.dbPass + "@" + config.db.url;
+mongoose.connect(dbUrl, { useNewUrlParser: true, useUnifiedTopology: true, useCreateIndex: true });
 const db = mongoose.connection;
 db.on('error', console.error.bind(console, 'connection error:'));
 db.once('open', () => {

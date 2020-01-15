@@ -4,6 +4,8 @@ const jwt = require('jsonwebtoken');
 const config = require('../config');
 const User = require('../models/user');
 const EmailToken = require('../models/email-token');
+const payload = require('../helpers/jwt-payload');
+const expiration = require('../helpers/expiration');
 
 /* MAGIC TOKEN REQUEST */
 router.post('/login', (req, res, next) => {
@@ -81,9 +83,7 @@ router.post('/token', (req, res, next) => {
                             "message": "The user was not found."
                         });
                     } else {
-                        let tokenExpires = token.createdAt;
-                        tokenExpires.setHours(tokenExpires.getHours() + config.magicLinkExpiration);
-                        if (Date.now() > tokenExpires) {
+                        if (Date.now() > expiration.hours(config.auth.magicLinkExpiration)) {
                             res.status(401).send({
                                 "success": false,
                                 "status": 401,
@@ -93,13 +93,19 @@ router.post('/token', (req, res, next) => {
                             if (!user.email.includes(token.email)) {
                                 user.email.push(token.email);
                             }
-                            let jwtoken = jwt.sign('payload', config.jwtPrivateKey);
-                            res.status(200).send({
-                                "success": true,
-                                "status": 200,
-                                "message": "Token found, JWT has been generated.",
-                                "token": jwtoken
-                            });
+                            payload.generate(user)
+                                .then((payload) => {
+                                    let jwtoken = jwt.sign(payload, config.secret.jwtPrivateKey);
+                                    res.status(200).send({
+                                        "success": true,
+                                        "status": 200,
+                                        "message": "Token found, JWT has been generated.",
+                                        "token": jwtoken
+                                    })
+                                })
+                                .catch((err) => {
+                                    throw new Error(err);
+                                });
                         }
                     }
                     token.remove();
