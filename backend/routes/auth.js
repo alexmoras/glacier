@@ -6,6 +6,7 @@ const User = require('../models/user');
 const EmailToken = require('../models/email-token');
 const payload = require('../helpers/jwt-payload');
 const expiration = require('../helpers/expiration');
+const mailer = require('../helpers/mailer');
 
 /* MAGIC TOKEN REQUEST */
 router.post('/login', (req, res, next) => {
@@ -34,6 +35,18 @@ router.post('/login', (req, res, next) => {
             token.email = email;
             token.save()
                 .then((token) => {
+                    mailer.send({
+                        from: 'no-reply@glacier.alexmoras.com', // Sender address
+                        to: token.email,         // List of recipients
+                        subject: 'Glacier Login Token', // Subject line
+                        html: '<p>Here is your Glacier magic-link: <a href="http://localhost:8080/login/magic/' + token.id + '">Click Here</a></p>' // Plain text body
+                    })
+                        .then((info) => {
+                            console.log(info);
+                        })
+                        .catch((err) => {
+                            console.log(err);
+                        });
                     res.status(202).send({
                         "success": true,
                         "status": 202,
@@ -84,6 +97,18 @@ router.post('/register', (req, res, next) => {
                     token.email = email;
                     token.save()
                         .then((token) => {
+                            mailer.send({
+                                from: 'no-reply@glacier.alexmoras.com', // Sender address
+                                to: token.email,         // List of recipients
+                                subject: 'Glacier Login Token', // Subject line
+                                html: '<p>Here is your Glacier magic-link: <a href="http://localhost:8080/login/magic/' + token.id + '">Click Here</a></p>' // Plain text body
+                            })
+                                .then((info) => {
+                                    console.log(info);
+                                })
+                                .catch((err) => {
+                                    console.log(err);
+                                });
                             res.status(202).send({
                                 "success": true,
                                 "status": 202,
