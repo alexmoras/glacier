@@ -18,7 +18,7 @@ async function generate(user) {
             if (!iceuser) {
                 throw new Error("User does not have an ICE account.");
             }
-            json["forname"] = iceuser.forename;
+            json["forename"] = iceuser.forename;
             json["surname"] = iceuser.surname;
             json.type.push({ "ice": true });
             return json;
@@ -38,8 +38,7 @@ async function generate(user) {
         .catch(() => {
             return null;
         });
-    let final = await merge(json, ice, service);
-    return final;
+    return await merge(json, ice, service);
 }
 
 module.exports = {

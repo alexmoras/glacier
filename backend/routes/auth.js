@@ -57,6 +57,56 @@ router.post('/login', (req, res, next) => {
 
 router.post('/register', (req, res, next) => {
     // Takes same parameters as "login" but CREATES them in the DB then sends magic token to confirm.
+    let email = escape(req.body.email);
+    let recaptcha = escape(req.body.recaptcha);
+    User.findOne({ email: [email] })
+        .then((user) => {
+            if(user) {
+                return res.status(200).send({
+                    "success": false,
+                    "status": 409,  // The status codes tend to follow HTTP codes, in this case user is Not Found (404)
+                    "message": "A user with that email address already exists."
+                });
+            }
+            if (!recaptcha) {
+                return res.status(401).send({
+                    "success": false,
+                    "status": 401,
+                    "message": "The recaptcha was below the threshold."
+                });
+            }
+            let newuser = new User();
+            newuser.email.push(email);
+            newuser.save()
+                .then((user) => {
+                    let token = new EmailToken();
+                    token.user = user.id;
+                    token.email = email;
+                    token.save()
+                        .then((token) => {
+                            res.status(202).send({
+                                "success": true,
+                                "status": 202,
+                                "message": "User has been created and a Magic Link has been sent to the email address provided. Please close this page."
+                            });
+                            console.log(token.id);
+                        })
+                        .catch((err) => {
+                            throw new Error("Token Error: " + err);
+                        });
+                })
+                .catch((err) => {
+                    throw new Error(err);
+                });
+        })
+        .catch((err) => {
+            console.log("Login error: " + err);
+            res.status(500).send({
+                "success": false,
+                "status": 500,
+                "message": "An unknown error has occurred during user login. Please try again later."
+            });
+        });
 });
 
 /* MAGIC TOKEN EXCHANGE */
