@@ -49,7 +49,8 @@ let contactSchema = new mongoose.Schema({
 let userSchema = new mongoose.Schema({
     user: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'User'
+        ref: 'User',
+        unique: true
     },
     forename: {
         type: String,
@@ -60,19 +61,21 @@ let userSchema = new mongoose.Schema({
         required: true
     },
     dob: {
-        type: Date,
+        type: String,
         required: true,
     },
     phone: [String],
-    address: [addressSchema],
+    address: {
+        type: [addressSchema],
+        required: false
+    },
     medical: {
         type: String,
         required: true
     },
-    contacts: [contactSchema],
-    organisation: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'Organisation'
+    contacts: {
+        type: [contactSchema],
+        required: false
     }
 },{ timestamps: true });
 

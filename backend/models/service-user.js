@@ -5,7 +5,8 @@ let mongoose = require('mongoose');
 let serviceUserSchema = mongoose.Schema({
     user: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'User'
+        ref: 'User',
+        unique: true
     },
     staffID: {
         type: String,

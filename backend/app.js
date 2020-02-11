@@ -3,6 +3,7 @@ var express = require('express');
 var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
+const passport = require('./helpers/passport');
 const mongoose = require('mongoose');
 const config = require('./config');
 const payload = require('./helpers/jwt-payload');
@@ -34,7 +35,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', apiRouter);
 app.use('/auth', authRouter);
-app.use('/users', usersRouter);
+app.use('/users', passport.authenticate('jwt', {session: false}), usersRouter);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
