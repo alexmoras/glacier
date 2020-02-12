@@ -38,7 +38,7 @@ const router = new VueRouter({
     { path: '/', component: HomePage},
     { path: '/app', component: AppPage },
     { path: '/create', component: CreatePage },
-    { path: '/login', component: LoginPage}
+    { path: '/login', component: LoginPage }
   ],
   mode: 'history'
 });

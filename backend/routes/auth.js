@@ -72,7 +72,7 @@ router.post('/register', (req, res, next) => {
     // Takes same parameters as "login" but CREATES them in the DB then sends magic token to confirm.
     let email = escape(req.body.email);
     let recaptcha = escape(req.body.recaptcha);
-    User.findOne({ email: [email] })
+    User.findOne({ email: email })
         .then((user) => {
             if(user) {
                 return res.status(200).send({
@@ -89,7 +89,7 @@ router.post('/register', (req, res, next) => {
                 });
             }
             let newuser = new User();
-            newuser.email.push(email);
+            newuser.email = email;
             newuser.save()
                 .then((user) => {
                     let token = new EmailToken();
@@ -125,7 +125,7 @@ router.post('/register', (req, res, next) => {
                 });
         })
         .catch((err) => {
-            console.log("Login error: " + err);
+            console.log("Register error: " + err);
             res.status(500).send({
                 "success": false,
                 "status": 500,
@@ -166,7 +166,7 @@ router.post('/token', (req, res, next) => {
                             });
                         } else {
                             if (!user.email.includes(token.email)) {
-                                user.email.push(token.email);
+                                user.email = token.email;
                             }
                             payload.generate(user)
                                 .then((payload) => {
@@ -186,7 +186,12 @@ router.post('/token', (req, res, next) => {
                     token.remove();
                 })
                 .catch((err) => {
-                    throw new Error("User Error: " + err);
+                    console.log(err);
+                    res.status(500).send({
+                        "success": false,
+                        "status": 500,
+                        "message": "An unknown error has occurred during user login. Please try again later."
+                    })
                 })
         })
         .catch((err) => {
