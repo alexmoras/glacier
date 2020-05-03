@@ -1,9 +1,9 @@
 let mongoose = require('mongoose');
 
 let emailTokenSchema = mongoose.Schema({
-    user: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'User',
+    email: {
+        type: String,
+        required: true
     }
 },{ timestamps: true });
 
