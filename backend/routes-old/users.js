@@ -1,8 +1,8 @@
 var express = require('express');
 var router = express.Router();
-const User = require('../models/user');
-const IceUser = require('../models/ice-user');
-const ServiceUser = require('../models/service-user');
+const User = require('../models-old/user');
+const IceUser = require('../models-old/ice-user');
+const ServiceUser = require('../models-old/service-user');
 const merge = require('merge');
 
 /* GET users listing. */

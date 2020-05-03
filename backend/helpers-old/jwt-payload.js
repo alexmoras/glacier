@@ -1,7 +1,7 @@
-const expiration = require('../helpers/expiration');
+const expiration = require('.//expiration');
 const merge = require('merge');
-const IceUser = require('../models/ice-user');
-const ServiceUser = require('../models/service-user');
+const IceUser = require('../models-old/ice-user');
+const ServiceUser = require('../models-old/service-user');
 const config = require('../config');
 
 async function generate(user) {

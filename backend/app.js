@@ -3,16 +3,16 @@ var express = require('express');
 var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
-const passport = require('./helpers/passport');
+const passport = require('./helpers-old/passport');
 const mongoose = require('mongoose');
 const config = require('./config');
-const payload = require('./helpers/jwt-payload');
+const payload = require('./helpers-old/jwt-payload');
 var app = express();
 
 // Routers
-var apiRouter = require('./routes/api');  // Provides a JSON route for API.
-var authRouter = require('./routes/auth');
-var usersRouter = require('./routes/users');
+var apiRouter = require('./routes-old/api');  // Provides a JSON route for API.
+var authRouter = require('./routes-old/auth');
+var usersRouter = require('./routes-old/users');
 
 // set up database connection
 const dbUrl = "mongodb://" + config.db.user + ":" + config.secret.dbPass + "@" + config.db.url;

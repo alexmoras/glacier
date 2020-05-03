@@ -2,11 +2,11 @@ var express = require('express');
 var router = express.Router();
 const jwt = require('jsonwebtoken');
 const config = require('../config');
-const User = require('../models/user');
-const EmailToken = require('../models/email-token');
-const payload = require('../helpers/jwt-payload');
-const expiration = require('../helpers/expiration');
-const mailer = require('../helpers/mailer');
+const User = require('../models-old/user');
+const EmailToken = require('../models-old/email-token');
+const payload = require('../helpers-old/jwt-payload');
+const expiration = require('../helpers-old/expiration');
+const mailer = require('../helpers-old/mailer');
 
 /* MAGIC TOKEN REQUEST */
 router.post('/login', (req, res, next) => {
