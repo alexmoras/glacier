@@ -12,7 +12,7 @@ router.get('/', (req, res, next) => {
         "status": 200,
         "message": "Yes, this is working as expected! At the moment, we don't return ALL users - that would be silly. " +
             "So for now, this is the response until the search queries are implemented here."
-    })
+    });
 });
 
 /* GET INDIVIDUAL USER */

@@ -46,6 +46,17 @@ let contactSchema = new mongoose.Schema({
     }
 },{ _id : false, timestamps: true });
 
+let idSchema = new mongoose.Schema({
+    name: {
+        type: String,
+        required: true,
+    },
+    value: {
+        type: String,
+        required: true,
+    }
+},{ _id : false, timestamps: true });
+
 let userSchema = new mongoose.Schema({
     user: {
         type: mongoose.Schema.Types.ObjectId,
@@ -75,6 +86,10 @@ let userSchema = new mongoose.Schema({
     },
     contacts: {
         type: [contactSchema],
+        required: false
+    },
+    idNumber: {
+        type: [idSchema],
         required: false
     }
 },{ timestamps: true });

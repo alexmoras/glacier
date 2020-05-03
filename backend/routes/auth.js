@@ -165,7 +165,7 @@ router.post('/token', (req, res, next) => {
                                 "message": "Token has expired."
                             });
                         } else {
-                            if (!user.email.includes(token.email)) {
+                            if (user.email !== token.email) {
                                 user.email = token.email;
                             }
                             payload.generate(user)

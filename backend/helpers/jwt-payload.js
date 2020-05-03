@@ -8,7 +8,7 @@ async function generate(user) {
     let json = {
         sub: user.id,
         iss: config.jwt.issuer,
-        exp: expiration.hours(config.jwt.expiration),
+        expiresIn: 60, //expiration.hours(config.jwt.expiration),
         email: user.email,
         type: []
     };
