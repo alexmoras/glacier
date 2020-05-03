@@ -3,16 +3,15 @@ var express = require('express');
 var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
-const passport = require('./helpers-old/passport');
+//const passport = require('./helpers/passport');
 const mongoose = require('mongoose');
 const config = require('./config');
-const payload = require('./helpers-old/jwt-payload');
 var app = express();
 
 // Routers
-var apiRouter = require('./routes-old/api');  // Provides a JSON route for API.
-var authRouter = require('./routes-old/auth');
-var usersRouter = require('./routes-old/users');
+var apiRouter = require('./routes/api');  // Provides a JSON route for API.
+var authRouter = require('./routes/auth');
+var usersRouter = require('./routes/users');
 
 // set up database connection
 const dbUrl = "mongodb://" + config.db.user + ":" + config.secret.dbPass + "@" + config.db.url;
@@ -35,7 +34,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', apiRouter);
 app.use('/auth', authRouter);
-app.use('/users', passport.authenticate('jwt', {session: false}), usersRouter);
+//app.use('/users', passport.authenticate('jwt', {session: false}), usersRouter);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
