@@ -1,7 +1,7 @@
 const nodemailer = require('nodemailer');
 const config = require('../config');
 
-async function send(message) {
+async function send(message, type) {
     let transport = nodemailer.createTransport({
         host: config.mail.host,
         port: config.mail.port,
@@ -11,13 +11,28 @@ async function send(message) {
         }
     });
 
-    return transport.sendMail(message)
-        .then((info) => {
-            return info;
+    if(!type) {
+        return transport.sendMail(message)
+            .then((info) => {
+                return info;
+            })
+            .catch((err) => {
+                throw new Error(err);
+            });
+    } else if(type === "email_token"){
+        return transport.sendMail({
+            from: 'no-reply@glacier.alexmoras.com', // Sender address
+            to: message.to,
+            subject: 'Glacier Login Token', // Subject line
+            html: '<p>Here is your Glacier magic-token: ' + message.token + '</p>'
         })
-        .catch((err) => {
-            throw new Error(err);
-        });
+            .then((info) => {
+                return info;
+            })
+            .catch((err) => {
+                throw new Error(err);
+            });
+    }
 }
 
 

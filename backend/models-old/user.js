@@ -7,6 +7,10 @@ let baseUserSchema = new mongoose.Schema({
         type: String,
         unique: true,
         required: true
+    },
+    isService: {
+        type: Boolean,
+        default: false
     }
 },{ timestamps: true });
 
