@@ -48,21 +48,29 @@ router.put('/:user/ice', (req, res, next) => {
     if(req.params.user === "me" || userLoader.has_staff_permission(req.user) || req.user.id === req.params.user){
         User.findById(requestedUser)
             .then(user => {
-                let payload = userLoader.check_ice_payload(req);
-                if(user && payload){
-                    return userLoader.put_ice(user, payload);
+                if(user){
+                    let data = req.body;
+                    data.user = user.id;
+                    return IceUser.validate(data).then(() => {return data});
                 } else {
-                    responder.failure(res, 400, 400, "Bad request. Make sure you are submitting the full payload and the user exists.");
+                    responder.failure(res, 200, 404, "User was not found.");
                 }
             })
-            // Check that there PUT completed and send response.
+            .then(data => {
+                return userLoader.put_ice(data);
+            })
+            // Check that PUT completed and send response.
             .then(ice => {
                 if(ice){
                     responder.success(res, 201, 201, ice);
                 }
             })
             .catch(err => {
-                responder.failure(res, 500, 500, "An error occurred.", err);
+                if(err.name === "ValidationError"){
+                    responder.failure(res, 400, 400, "Bad request. Please check the payload and try again.");
+                } else {
+                    responder.failure(res, 500, 500, "An error occurred.", err);
+                }
             });
     } else {
         responder.failure(res, 401, 401, "Not authorised.", {
@@ -81,24 +89,32 @@ router.put('/:user/service', (req, res, next) => {
     } else {
         requestedUser = req.params.user;
     }
-    if(req.params.user === "me" || userLoader.has_staff_permission(req.user) || req.user.id === req.params.user){
+    if(((req.params.user === "me" || req.user.id === req.params.user) && (userLoader.check_service_email(req.user))) || userLoader.has_staff_permission(req.user)){
         User.findById(requestedUser)
             .then(user => {
-                let payload = userLoader.check_service_payload(req);
-                if(user && payload){
-                    return userLoader.put_service(user, payload);
+                if(user){
+                    let data = req.body;
+                    data.user = user.id;
+                    return ServiceUser.validate(data).then(() => {return data});
                 } else {
-                    responder.failure(res, 400, 400, "Bad request. Make sure you are submitting the full payload and the user exists.");
+                    responder.failure(res, 200, 404, "User was not found.");
                 }
             })
-            // Check that there PUT completed and send response.
+            .then(data => {
+                return userLoader.put_service(data);
+            })
+            // Check that PUT completed and send response.
             .then(service => {
                 if(service){
                     responder.success(res, 201, 201, service);
                 }
             })
             .catch(err => {
-                responder.failure(res, 500, 500, "An error occurred.", err);
+                if(err.name === "ValidationError"){
+                    responder.failure(res, 400, 400, "Bad request. Please check the payload and try again.");
+                } else {
+                    responder.failure(res, 500, 500, "An error occurred.", err);
+                }
             });
     } else {
         responder.failure(res, 401, 401, "Not authorised.", {
