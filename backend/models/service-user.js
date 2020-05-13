@@ -6,7 +6,8 @@ let serviceUserSchema = mongoose.Schema({
     user: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'User',
-        unique: true
+        unique: true,
+        required: true
     },
     staffID: {
         type: String,
