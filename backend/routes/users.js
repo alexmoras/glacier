@@ -14,25 +14,38 @@ GET
  */
 
 router.get('/:user', (req, res, next) => {
+    let requestedUser;
     if(req.params.user === "me"){
-        responder.success(res, 200, 200, userLoader.get_all(req.user));
-    } else if (userLoader.has_permission(req.user) || req.user.id === req.params.user){
-        User.findById(req.params.user)
+        requestedUser = req.user;
+    } else {
+        requestedUser = req.params.user;
+    }
+    if (req.params.user === "me" || userLoader.has_staff_permission(req.user) || req.user.id === req.params.user){
+        User.findById(requestedUser)
             .then(user => {
                 if(user){
-                    responder.success(res, 200, 200, userLoader.get_all(user));
+                    return userLoader.get_all(user);
                 } else {
                     responder.failure(res, 200, 404, "User does not exist.");
                 }
             })
+            .then(all => {
+                if(all){
+                    responder.success(res, 200, 200, all);
+                }
+            })
             .catch(err => {
-                responder.failure(res, 500, 500, "An error occurred.", err);
+                if(err.name === "CastError"){
+                    responder.failure(res, 200, 404, "User does not exist.");
+                } else {
+                    responder.failure(res, 500, 500, "An error occurred.", err);
+                }
             })
     } else {
         responder.failure(res, 401, 401, "Not authorised.", {
             "action": "User attempted to access a resource they do not have access to.",
             "by": req.user.id,
-            "on": req.params.user
+            "on": requestedUser
         });
     }
 });
