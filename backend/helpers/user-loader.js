@@ -11,12 +11,19 @@ async function get_all(user) {
         .then(all_array => {
             const [ice, service] = all_array;
             let json = user.toJSON();
-            json.ice = ice.toJSON();
-            delete json.ice._id;
-            delete json.ice.user;
-            json.service = service.toJSON();
-            delete json.service._id;
-            delete json.service.user;
+            if(ice != null) {
+                json.ice = ice.toJSON();
+                delete json.ice._id;
+                delete json.ice.user;
+            }
+            if(service != null) {
+                json.service = service.toJSON();
+                delete json.service._id;
+                delete json.service.user;
+            }
+            json.permission = {
+                service: !!has_permission(user)
+            }
             return json;
         })
 }
@@ -27,7 +34,11 @@ function has_permission(user) {
             return check_service_email(user) || org.staff.contains(user) || org.admin.contains(user);
         })
         .catch(() => {
-            return false;
+            if(check_service_email(user)){
+                return true;
+            } else {
+                return false;
+            }
         });
 }
 

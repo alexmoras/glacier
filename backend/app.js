@@ -32,6 +32,15 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
+/*
+app.use((req, res, next) => {
+  res.header("Access-Control-Allow-Origin", "*");
+  res.header("Access-Control-Allow-Methods", "*")
+  res.header("Access-Control-Allow-Headers", "*");
+  next();
+})
+ */
+
 app.use('/', apiRouter);
 app.use('/auth', authRouter);
 app.use('/users', passport.authenticate('jwt', {session: false}), usersRouter);

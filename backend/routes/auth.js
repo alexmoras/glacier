@@ -5,6 +5,8 @@ const User = require('../models/user');
 const EmailToken = require('../models/email-token');
 const responder = require('../helpers/responder');
 const mailer = require('../helpers/mailer');
+const userLoader = require('../helpers/user-loader');
+const passport = require('../helpers/passport');
 
 /* GENERATE MAGIC-LINK AND EMAIL TO USER */
 router.post('/login', (req, res, next) => {
