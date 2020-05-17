@@ -22,6 +22,7 @@
 <script>
     import axios from "axios";
     import qs from "querystring";
+    import config from "../../config";
     export default {
         name: "LoginForm",
         data() {
@@ -39,7 +40,8 @@
                     method: "post",
                     url: "/auth/login",
                     data: qs.stringify({
-                        email: this.form.email
+                        email: this.form.email,
+                        url: config.url + "/login/"
                     })
                 })
                     .then(msg => {

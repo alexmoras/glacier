@@ -11,6 +11,7 @@ const passport = require('../helpers/passport');
 /* GENERATE MAGIC-LINK AND EMAIL TO USER */
 router.post('/login', (req, res, next) => {
     let email = escape(req.body.email);
+    let url = escape(req.body.url);
     // TODO: add recaptcha
 
     EmailToken({ email: email }).save()
@@ -18,7 +19,7 @@ router.post('/login', (req, res, next) => {
             mailer.send({
                 to: email,
                 token: email_token.id
-            }, "email_token")
+            }, "email_token", url)
                 .then(() => {
                     responder.success(res, 202, 202, "A magic link has been sent to the user.");
                 })

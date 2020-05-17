@@ -27,9 +27,10 @@
             .then(msg => {
                 if(msg.data.success === true){
                     JWTManager.methods.setJWT(msg.data.message.token);
-                    alert(JWTManager.methods.getJWT());
+                    this.$router.push('/app');
                 } else {
                     alert(":sad_face:");
+                    this.$router.push('/');
                 }
             })
             .catch(err => {
