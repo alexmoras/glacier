@@ -5,7 +5,7 @@
             <b-card-title>
                 App Page
             </b-card-title>
-            <UserWizard />
+            <EditUser></EditUser>
         </b-container>
     </div>
 </template>
@@ -14,13 +14,11 @@
     import StaticNav from "../../components/layout/StaticNav";
     import axios from "axios";
     import JWTManager from "../../components/JWTManager";
-    import UserWizard from "./UserApp/edit/index";
-    //import GetUser from "../../components/GetUser";
-    //import qs from "querystring";
+    import EditUser from "./UserApp/EditUser";
 
     export default {
         name: "AppPage",
-        components: {UserWizard, StaticNav},
+        components: {EditUser, StaticNav},
         data() {
             return {
                 data: ""
