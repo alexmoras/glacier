@@ -5,7 +5,7 @@
             <b-card-title>
                 App Page
             </b-card-title>
-            <EditUser></EditUser>
+            <EditContact></EditContact>
         </b-container>
     </div>
 </template>
@@ -14,11 +14,11 @@
     import StaticNav from "../../components/layout/StaticNav";
     import axios from "axios";
     import JWTManager from "../../components/JWTManager";
-    import EditUser from "./UserApp/EditUser";
+    import EditContact from "./UserApp/EditContact";
 
     export default {
         name: "AppPage",
-        components: {EditUser, StaticNav},
+        components: {EditContact, StaticNav},
         data() {
             return {
                 data: ""

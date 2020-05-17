@@ -86,7 +86,7 @@
     import axios from "axios";
     import JWTManager from "../../../../components/JWTManager";
     export default {
-        name: "UserWizard",
+        name: "EditUser",
         components: {},
         data() {
             return {
