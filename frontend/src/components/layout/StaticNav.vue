@@ -12,10 +12,8 @@
             </b-navbar-nav>
             <b-navbar-nav class="ml-auto">
                 <b-nav-item>
-                    <b-button class="btn-block" variant="outline-light" squared to="/login">Login</b-button>
-                </b-nav-item>
-                <b-nav-item>
-                    <b-button class="btn-block" variant="light" squared to="/create">Create</b-button>
+                    <b-button class="btn-block" variant="outline-light" squared to="/login" v-if="!this.loggedIn">Login</b-button>
+                    <b-button class="btn-block" variant="light" squared type="submit" v-if="this.loggedIn" v-on:click="logout">Logout</b-button>
                 </b-nav-item>
             </b-navbar-nav>
         </b-collapse>
@@ -23,8 +21,28 @@
 </template>
 
 <script>
+    import JWTManager from "../JWTManager";
+
     export default {
-        name: "StaticNav"
+        name: "StaticNav",
+        data() {
+            return {
+                loggedIn: false
+            }
+        },
+        methods: {
+            logout(){
+                JWTManager.methods.deleteJWT();
+                this.loggedIn = false;
+            }
+        },
+        created() {
+            if(JWTManager.methods.getJWT()){
+                this.loggedIn = true;
+            } else {
+                this.loggedIn = false;
+            }
+        }
     }
 </script>
 

@@ -2,18 +2,17 @@
     <div>
         <StaticNav />
         <b-container fluid>
-            <b-card-title>
-                Login Page
-            </b-card-title>
+            <LoginForm />
         </b-container>
     </div>
 </template>
 
 <script>
     import StaticNav from "../components/layout/StaticNav";
+    import LoginForm from "../components/LoginForm";
     export default {
         name: "LoginPage",
-        components: {StaticNav}
+        components: {LoginForm, StaticNav}
     }
 </script>
 
