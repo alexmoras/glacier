@@ -1,12 +1,13 @@
 const nodemailer = require('nodemailer');
+const config = require('../config');
 
 async function send(message, type, url) {
     let transport = nodemailer.createTransport({
-        host: process.env.MAIL_HOST,
-        port: process.env.MAIL_PORT,
+        host: config.mail_host,
+        port: config.mail_port,
         auth: {
-            user: process.env.MAIL_USER,
-            pass: process.env.MAIL_PASS
+            user: config.mail_user,
+            pass: config.mail_pass
         }
     });
 

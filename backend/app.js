@@ -1,5 +1,4 @@
-require('dotenv').config();
-
+let config = require('./config');
 var createError = require('http-errors');
 var express = require('express');
 const Sentry = require('@sentry/node');
@@ -10,7 +9,7 @@ const passport = require('./helpers/passport');
 const mongoose = require('mongoose');
 var app = express();
 
-Sentry.init({ dsn: process.env.SENTRY, release: 'glacier-backend@' + process.env.npm_package_version });
+Sentry.init({ dsn: config.sentry, release: 'glacier-backend@' + process.env.npm_package_version });
 app.use(Sentry.Handlers.requestHandler());
 
 // Routers
@@ -19,7 +18,7 @@ var authRouter = require('./routes/auth');
 var usersRouter = require('./routes/users');
 
 // set up database connection
-const dbUrl = "mongodb://" + process.env.DB_USER + ":" + process.env.DB_PASS + "@" + process.env.DB_URL;
+const dbUrl = "mongodb://" + config.db_user + ":" + config.db_pass + "@" + config.db_url;
 mongoose.connect(dbUrl, { useNewUrlParser: true, useUnifiedTopology: true, useCreateIndex: true, useFindAndModify: false });
 const db = mongoose.connection;
 db.on('error', console.error.bind(console, 'connection error:'));
@@ -36,15 +35,6 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
-
-/*
-app.use((req, res, next) => {
-  res.header("Access-Control-Allow-Origin", "*");
-  res.header("Access-Control-Allow-Methods", "*")
-  res.header("Access-Control-Allow-Headers", "*");
-  next();
-})
- */
 
 app.use('/', apiRouter);
 app.use('/auth', authRouter);
