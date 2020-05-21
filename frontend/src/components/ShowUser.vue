@@ -2,8 +2,10 @@
     <b-container fluid="" id="user-container">
         <b-card id="details-container" no-body>
             <b-list-group flush>
-                <b-list-group-item>
+                <b-container fluid="">
                     <b-button class="float-right" variant="secondary" v-if="edit === true" @click="editUser" squared>Edit <font-awesome-icon :icon="['far', 'edit']"></font-awesome-icon></b-button>
+                </b-container>
+                <b-list-group-item>
                     <b-card-body class="text-center">
                         <b-card-text class="text-name"><h2>{{forename}} {{surname}}</h2></b-card-text>
                         <b-card-text class="text-dob"><h3>{{dob}}</h3></b-card-text>
