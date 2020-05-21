@@ -1,7 +1,6 @@
 const IceUser = require('../models/ice-user');
 const ServiceUser = require('../models/service-user');
 const Organisation = require('../models/organisation');
-const config = require('../config');
 
 async function get_all(user) {
     return Promise.all([
@@ -29,7 +28,7 @@ async function get_all(user) {
 }
 
 function has_permission(user) {
-    Organisation.findOne({"domain": config.app.domain})
+    Organisation.findOne({"domain": process.env.DOMAIN})
         .then(org => {
             return check_service_email(user) || org.staff.contains(user) || org.admin.contains(user);
         })
@@ -43,7 +42,7 @@ function has_permission(user) {
 }
 
 function has_staff_permission(user) {
-    Organisation.findOne({"domain": config.app.domain})
+    Organisation.findOne({"domain": process.env.DOMAIN})
         .then(org => {
             return org.staff.contains(user) || org.admin.contains(user);
         })
@@ -74,7 +73,7 @@ async function put_service(data){
 
 function check_service_email(user){
     let verified = false;
-    config.service.domains.forEach(domain => {
+    process.env.SERVICE_DOMAINS.forEach(domain => {
         if(user.email.toString().toLowerCase().endsWith(domain.toLowerCase())){
             verified = true;
         }

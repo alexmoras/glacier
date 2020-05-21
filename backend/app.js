@@ -1,3 +1,5 @@
+require('dotenv').config();
+
 var createError = require('http-errors');
 var express = require('express');
 const Sentry = require('@sentry/node');
@@ -6,10 +8,9 @@ var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 const passport = require('./helpers/passport');
 const mongoose = require('mongoose');
-const config = require('./config');
 var app = express();
 
-Sentry.init({ dsn: config.sentry.dsn });
+Sentry.init({ dsn: process.env.SENTRY, release: 'glacier-backend@' + process.env.npm_package_version });
 app.use(Sentry.Handlers.requestHandler());
 
 // Routers
@@ -18,7 +19,7 @@ var authRouter = require('./routes/auth');
 var usersRouter = require('./routes/users');
 
 // set up database connection
-const dbUrl = "mongodb://" + config.db.user + ":" + config.secret.dbPass + "@" + config.db.url;
+const dbUrl = "mongodb://" + process.env.DB_USER + ":" + process.env.DB_PASS + "@" + process.env.DB_URL;
 mongoose.connect(dbUrl, { useNewUrlParser: true, useUnifiedTopology: true, useCreateIndex: true, useFindAndModify: false });
 const db = mongoose.connection;
 db.on('error', console.error.bind(console, 'connection error:'));

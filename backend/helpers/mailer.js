@@ -1,14 +1,12 @@
 const nodemailer = require('nodemailer');
-const mg = require('nodemailer-mailgun-transport');
-const config = require('../config');
 
 async function send(message, type, url) {
     let transport = nodemailer.createTransport({
-        host: config.mail.host,
-        port: config.mail.port,
+        host: process.env.MAIL_HOST,
+        port: process.env.MAIL_PORT,
         auth: {
-            user: config.mail.user,
-            pass: config.secret.emailPass
+            user: process.env.MAIL_USER,
+            pass: process.env.MAIL_PASS
         }
     });
 
