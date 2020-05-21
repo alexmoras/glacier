@@ -1,22 +1,30 @@
 <template>
-    <b-form @submit="onSubmit" v-if="show">
-        <b-form-group
-                id="input-group-1"
-                label="Email address:"
-                label-for="input-1"
-                description="We'll never share your email with anyone else."
-        >
-            <b-form-input
-                    id="input-1"
-                    v-model="form.email"
-                    type="email"
-                    required
-                    placeholder="Enter email"
-            ></b-form-input>
-        </b-form-group>
+    <div>
+        <b-alert variant="success" :show="successAlert">A link has been sent to the email address supplied.</b-alert>
+        <b-alert variant="danger" :show="errorAlert">An error occurred when sending the login link. Please try again.</b-alert>
+        <b-form @submit="onSubmit" v-if="show">
+            <b-form-group
+                    id="input-group-1"
+                    label="Email address:"
+                    label-for="input-1"
+                    description="We'll never share your email with anyone else."
+            >
+                <b-form-input
+                        id="input-1"
+                        v-model="form.email"
+                        type="email"
+                        required
+                        placeholder="Enter email"
+                ></b-form-input>
+            </b-form-group>
 
-        <b-button type="submit" variant="primary">Submit</b-button>
-    </b-form>
+            <b-button type="submit" variant="primary" disabled v-if="processing" squared>
+                <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                Loading...
+            </b-button>
+            <b-button type="submit" variant="primary" v-if="!processing" squared>Submit</b-button>
+        </b-form>
+    </div>
 </template>
 
 <script>
@@ -30,11 +38,17 @@
                 form: {
                     email: ''
                 },
-                show: true
+                show: true,
+                processing: false,
+                successAlert: false,
+                errorAlert: false
             }
         },
         methods: {
             onSubmit(evt) {
+                this.successAlert = false;
+                this.errorAlert = false;
+                this.processing = true;
                 evt.preventDefault()
                 axios({
                     method: "post",
@@ -45,14 +59,21 @@
                     })
                 })
                     .then(msg => {
+                        this.processing = false;
                         if(msg.data.success === true){
-                            alert("Success.")
+                            this.successAlert = true;
+                            this.$emit('success', true);
                         } else {
-                            alert("Error.")
+                            this.errorAlert = true;
+                            this.$emit('success', false);
+                            this.$emit('message', msg.data.message);
                         }
                     })
                     .catch(err => {
-                        alert(err);
+                        this.processing = false;
+                        this.errorAlert = true;
+                        this.$emit('success', false);
+                        this.$emit('message', err);
                     })
             }
         }
@@ -60,5 +81,7 @@
 </script>
 
 <style scoped>
-
+    #spinner-submit{
+        padding: 0.5rem;
+    }
 </style>
