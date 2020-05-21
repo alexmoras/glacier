@@ -7,7 +7,7 @@ const config = require('../config');
 
 passport.use(new JWTStrategy({
     jwtFromRequest: ExtractJWT.fromAuthHeaderAsBearerToken(),
-    secretOrKey: config.secret.jwtPrivateKey
+    secretOrKey: config.jwt_private
 }, (jwtPayload, cb) => {
     return User.findById(jwtPayload.sub)
         .then(user => {

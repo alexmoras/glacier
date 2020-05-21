@@ -27,7 +27,7 @@ let addressSchema = new mongoose.Schema({
         type: String,
         required: true
     }
-},{ _id : false});
+},{ _id : false, minimize: false});
 
 let contactSchema = new mongoose.Schema({
     forename: {
@@ -38,13 +38,19 @@ let contactSchema = new mongoose.Schema({
         type: String,
         required: true
     },
-    phone: [String],
-    address: [addressSchema],
+    phone: {
+        type: [String],
+        required: true
+    },
+    address: {
+        type: [addressSchema],
+        required: true
+    },
     relationship: {
         type: String,
         required: true
     }
-},{ _id : false});
+},{ _id : false, minimize: false});
 
 let idSchema = new mongoose.Schema({
     name: {
@@ -55,7 +61,7 @@ let idSchema = new mongoose.Schema({
         type: String,
         required: true,
     }
-},{ _id : false});
+},{ _id : false, minimize: false});
 
 let userSchema = new mongoose.Schema({
     user: {
@@ -75,10 +81,13 @@ let userSchema = new mongoose.Schema({
         type: String,
         required: true,
     },
-    phone: [String],
+    phone: {
+        type: [String],
+        required: true
+    },
     address: {
         type: [addressSchema],
-        required: false
+        required: true
     },
     medical: {
         type: String,
@@ -86,12 +95,13 @@ let userSchema = new mongoose.Schema({
     },
     contacts: {
         type: [contactSchema],
-        required: false
+        required: true
     },
     idNumber: {
         type: [idSchema],
-        required: false
+        required: true
     }
-},{ timestamps: true });
+},{ timestamps: true, minimize: false });
 
+mongoose.Schema.Types.String.checkRequired(v => v != null);
 module.exports = mongoose.model('IceUser', userSchema);

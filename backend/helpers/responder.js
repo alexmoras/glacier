@@ -9,16 +9,13 @@ function success(res, http_code, status_code, message) {
 
 function failure(res, http_code, status_code, message, error) {
     if (!message) { message = "This action could not be completed. Please try again." }
-    res.status(http_code).send({
-        "success": false,
-        "status": status_code,
-        "message": message
-    });
     if(error){
-        console.log({
+        throw new Error(message);
+    } else {
+        res.status(http_code).send({
+            "success": false,
             "status": status_code,
-            "message": message,
-            "error": error
+            "message": message
         });
     }
 }

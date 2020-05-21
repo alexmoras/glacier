@@ -1,13 +1,13 @@
 const nodemailer = require('nodemailer');
 const config = require('../config');
 
-async function send(message, type) {
+async function send(message, type, url) {
     let transport = nodemailer.createTransport({
-        host: config.mail.host,
-        port: config.mail.port,
+        host: config.mail_host,
+        port: config.mail_port,
         auth: {
-            user: config.mail.user,
-            pass: config.secret.emailPass
+            user: config.mail_user,
+            pass: config.mail_pass
         }
     });
 
@@ -20,11 +20,17 @@ async function send(message, type) {
                 throw new Error(err);
             });
     } else if(type === "email_token"){
+        let html;
+        if(url != null){
+            html = "<p>Login with Glacier: <a href='" + unescape(url) + message.token + "'>" + unescape(url) + message.token + "</a></p>";
+        } else {
+            html = "<p>Here is your Glacier magic-token: ' + message.token + '</p>";
+        }
         return transport.sendMail({
             from: 'no-reply@glacier.alexmoras.com', // Sender address
             to: message.to,
             subject: 'Glacier Login Token', // Subject line
-            html: '<p>Here is your Glacier magic-token: ' + message.token + '</p>'
+            html: html
         })
             .then((info) => {
                 return info;

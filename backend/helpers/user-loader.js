@@ -11,28 +11,39 @@ async function get_all(user) {
         .then(all_array => {
             const [ice, service] = all_array;
             let json = user.toJSON();
-            json.ice = ice.toJSON();
-            delete json.ice._id;
-            delete json.ice.user;
-            json.service = service.toJSON();
-            delete json.service._id;
-            delete json.service.user;
+            if(ice != null) {
+                json.ice = ice.toJSON();
+                delete json.ice._id;
+                delete json.ice.user;
+            }
+            if(service != null) {
+                json.service = service.toJSON();
+                delete json.service._id;
+                delete json.service.user;
+            }
+            json.permission = {
+                service: !!has_permission(user)
+            }
             return json;
         })
 }
 
 function has_permission(user) {
-    Organisation.findOne({"domain": config.app.domain})
+    Organisation.findOne({"domain": config.domain})
         .then(org => {
             return check_service_email(user) || org.staff.contains(user) || org.admin.contains(user);
         })
         .catch(() => {
-            return false;
+            if(check_service_email(user)){
+                return true;
+            } else {
+                return false;
+            }
         });
 }
 
 function has_staff_permission(user) {
-    Organisation.findOne({"domain": config.app.domain})
+    Organisation.findOne({"domain": config.domain})
         .then(org => {
             return org.staff.contains(user) || org.admin.contains(user);
         })
@@ -63,7 +74,7 @@ async function put_service(data){
 
 function check_service_email(user){
     let verified = false;
-    config.service.domains.forEach(domain => {
+    config.service_domains.forEach(domain => {
         if(user.email.toString().toLowerCase().endsWith(domain.toLowerCase())){
             verified = true;
         }

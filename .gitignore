@@ -105,4 +105,4 @@ dist
 
 .idea/
 
-config.js
+frontend/config.js

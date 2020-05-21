@@ -21,10 +21,10 @@ library.add(fad);
 
 // Import pages/components
 import App from "./App";
-import HomePage from '@/pages/HomePage'
-import AppPage from '@/pages/AppPage'
-import CreatePage from "./pages/CreatePage";
+import HomePage from '@/pages/HomePage';
+import AppPage from '@/pages/AppPage';
 import LoginPage from "./pages/LoginPage";
+import TokenPage from "./pages/TokenPage";
 
 
 // Here we go... setting up the main stuff now!
@@ -37,8 +37,8 @@ const router = new VueRouter({
   routes: [
     { path: '/', component: HomePage},
     { path: '/app', component: AppPage },
-    { path: '/create', component: CreatePage },
-    { path: '/login', component: LoginPage }
+    { path: '/login', component: LoginPage },
+    { path: '/login/:token', component: TokenPage }
   ],
   mode: 'history'
 });

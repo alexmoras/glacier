@@ -19,4 +19,5 @@ let serviceUserSchema = mongoose.Schema({
     }
 },{ timestamps: true });
 
+mongoose.Schema.Types.String.checkRequired(v => v != null);
 module.exports = mongoose.model("ServiceUser", serviceUserSchema);

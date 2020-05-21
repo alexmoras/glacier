@@ -1,20 +1,28 @@
 <template>
     <div>
-        <StaticNav />
-        <b-container fluid>
-            <b-card-title>
-                App Page
-            </b-card-title>
+        <AppNav />
+        <b-container fluid="">
+            <UserApp />
         </b-container>
     </div>
 </template>
 
 <script>
-    import StaticNav from "../../components/layout/StaticNav";
+    import AppNav from "../../components/layout/AppNav";
+    import UserApp from "./UserApp/index";
 
     export default {
         name: "AppPage",
-        components: {StaticNav}
+        components: {UserApp, AppNav},
+        data() {
+            return {
+                loggedIn: false,
+            }
+        },
+        methods: {
+        },
+        created() {
+        }
     }
 </script>
 

@@ -28,4 +28,5 @@ let orgSchema = new mongoose.Schema({
     publicContact: String  // Email for customer service.
 },{ timestamps: true });
 
+mongoose.Schema.Types.String.checkRequired(v => v != null);
 module.exports = mongoose.model('Organisation', orgSchema);
