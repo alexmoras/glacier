@@ -1,5 +1,6 @@
 var createError = require('http-errors');
 var express = require('express');
+const Sentry = require('@sentry/node');
 var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
@@ -7,6 +8,9 @@ const passport = require('./helpers/passport');
 const mongoose = require('mongoose');
 const config = require('./config');
 var app = express();
+
+Sentry.init({ dsn: config.sentry.dsn });
+app.use(Sentry.Handlers.requestHandler());
 
 // Routers
 var apiRouter = require('./routes/api');  // Provides a JSON route for API.
@@ -44,6 +48,8 @@ app.use((req, res, next) => {
 app.use('/', apiRouter);
 app.use('/auth', authRouter);
 app.use('/users', passport.authenticate('jwt', {session: false}), usersRouter);
+
+app.use(Sentry.Handlers.errorHandler());
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
