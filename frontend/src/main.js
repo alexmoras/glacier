@@ -1,6 +1,11 @@
 // Import core files
 import Vue from 'vue'
 import VueRouter from 'vue-router'
+import config from '../config';
+
+import * as Sentry from '@sentry/browser';
+import { Vue as VueIntegration } from '@sentry/integrations';
+
 import BootstrapVue from 'bootstrap-vue'
 
 // Import CSS files
@@ -32,6 +37,11 @@ Vue.use(VueRouter);
 Vue.use(BootstrapVue);
 Vue.component('font-awesome-icon', FontAwesomeIcon);
 Vue.config.productionTip = false;
+
+Sentry.init({
+  dsn: config.sentry,
+  integrations: [new VueIntegration({Vue, attachProps: true})],
+});
 
 const router = new VueRouter({
   routes: [
