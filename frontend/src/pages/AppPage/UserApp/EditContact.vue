@@ -1,99 +1,99 @@
 <template>
-    <div>
-        <div class="contacts-container">
-            <b-form>
-                <b-button class="addButton" @click="addContact">Add Contact</b-button>
-                <div id="contacts" v-for="(add, counter) in contacts" v-bind:key="counter">
-                    <b-form-input
-                            id="forename"
-                            placeholder="First Name"
-                            v-model="add.forename"
-                            required
-                    ></b-form-input>
+    <div class="contacts-container" v-show="loaded">
+        <b-form>
+            <b-button class="addButton" @click="addContact">Add Contact</b-button>
+            <div id="contacts" v-for="(add, counter) in contacts" v-bind:key="counter">
+                <b-form-input
+                        id="forename"
+                        placeholder="First Name"
+                        v-model="add.forename"
+                        required
 
-                    <b-form-input
-                            id="surname"
-                            placeholder="Last Name"
-                            v-model="add.surname"
-                            required
-                    ></b-form-input>
+                ></b-form-input>
 
+                <b-form-input
+                        id="surname"
+                        placeholder="Last Name"
+                        v-model="add.surname"
+                        required
+                ></b-form-input>
+
+                <b-form-input
+                        id="relationship"
+                        placeholder="Relationship"
+                        v-model="add.relationship"
+                        required
+                ></b-form-input>
+
+                <b-button class="addButton" @click="addContactPhone(counter)">Add Phone</b-button>
+                <div id="phone" v-for="(addPhone, counterPhone) in add.phone" v-bind:key="'P' + counterPhone">
                     <b-form-input
                             id="relationship"
-                            placeholder="Relationship"
-                            v-model="add.relationship"
+                            placeholder="Phone"
+                            v-model="add.phone[counterPhone]"
+                            required
+                    ></b-form-input>
+                    <b-button class="deleteButton" @click="deleteContactPhone(counter, counterPhone)">Delete Phone</b-button>
+                </div>
+
+                <b-button class="addButton" @click="addContactAddress(counter)">Add Address</b-button>
+                <div id="address" v-for="(addAddress, counterAddress) in add.address" v-bind:key="'A' + counterAddress">
+                    <b-form-input
+                            id="line1"
+                            placeholder="Line 1"
+                            v-model="addAddress.line1"
                             required
                     ></b-form-input>
 
-                    <b-button class="addButton" @click="addContactPhone(counter)">Add Phone</b-button>
-                    <div id="phone" v-for="(addPhone, counterPhone) in add.phone" v-bind:key="'P' + counterPhone">
-                        <b-form-input
-                                id="relationship"
-                                placeholder="Phone"
-                                v-model="add.phone[counterPhone]"
-                                required
-                        ></b-form-input>
-                        <b-button class="deleteButton" @click="deleteContactPhone(counter, counterPhone)">Delete Phone</b-button>
-                    </div>
+                    <b-form-input
+                            id="line2"
+                            placeholder="Line 2"
+                            v-model="addAddress.line2"
+                    ></b-form-input>
 
-                    <b-button class="addButton" @click="addContactAddress(counter)">Add Address</b-button>
-                    <div id="address" v-for="(addAddress, counterAddress) in add.address" v-bind:key="'A' + counterAddress">
-                        <b-form-input
-                                id="line1"
-                                placeholder="Line 1"
-                                v-model="addAddress.line1"
-                                required
-                        ></b-form-input>
+                    <b-form-input
+                            id="town"
+                            placeholder="Town"
+                            v-model="addAddress.town"
+                    ></b-form-input>
 
-                        <b-form-input
-                                id="line2"
-                                placeholder="Line 2"
-                                v-model="addAddress.line2"
-                        ></b-form-input>
+                    <b-form-input
+                            id="county"
+                            placeholder="County"
+                            v-model="addAddress.county"
+                    ></b-form-input>
 
-                        <b-form-input
-                                id="town"
-                                placeholder="Town"
-                                v-model="addAddress.town"
-                        ></b-form-input>
+                    <b-form-input
+                            id="country"
+                            placeholder="Country"
+                            v-model="addAddress.country"
+                            required
+                    ></b-form-input>
 
-                        <b-form-input
-                                id="county"
-                                placeholder="County"
-                                v-model="addAddress.county"
-                        ></b-form-input>
-
-                        <b-form-input
-                                id="country"
-                                placeholder="Country"
-                                v-model="addAddress.country"
-                                required
-                        ></b-form-input>
-
-                        <b-form-input
-                                id="postcode"
-                                placeholder="Post Code"
-                                v-model="addAddress.postcode"
-                                required
-                        ></b-form-input>
-                        <b-button class="deleteButton" @click="deleteContactAddress(counter, counterAddress)">Delete Address</b-button>
-                    </div>
-                    <b-button class="deleteButton" @click="deleteContact(counter)">Delete Contact</b-button>
+                    <b-form-input
+                            id="postcode"
+                            placeholder="Post Code"
+                            v-model="addAddress.postcode"
+                            required
+                    ></b-form-input>
+                    <b-button class="deleteButton" @click="deleteContactAddress(counter, counterAddress)">Delete Address</b-button>
                 </div>
-                <b-button @click="onSubmit">Submit</b-button>
-            </b-form>
-        </div>
+                <b-button class="deleteButton" @click="deleteContact(counter)">Delete Contact</b-button>
+            </div>
+            <b-button @click="onSubmit" :disabled="!loaded">Submit</b-button>
+        </b-form>
     </div>
 </template>
 
 <script>
     import axios from "axios";
-    import JWTManager from "../../../../components/JWTManager";
+    import JWTManager from "../../../components/JWTManager";
 
     export default {
         name: "EditContact",
         data() {
             return {
+                loaded: false,
                 user: {},
                 forename: '',
                 surname: '',
@@ -134,6 +134,7 @@
                             if (Array.isArray(msg.data.message.ice.contacts)) {
                                 this.contacts = msg.data.message.ice.contacts;
                             }
+                            this.loaded = true;
                         }
                         return msg;
                     })
@@ -194,13 +195,14 @@
                 })
                     .then(msg => {
                         if(msg.data.success === true){
-                            alert("Success");
+                            this.$emit('success', true);
                         } else {
-                            alert(msg.data.message);
+                            this.$emit('success', false);
                         }
                     })
                     .catch(err => {
                         alert(err + '\n' + JSON.stringify(json));
+                        this.$emit('success', false);
                     });
             }
         },

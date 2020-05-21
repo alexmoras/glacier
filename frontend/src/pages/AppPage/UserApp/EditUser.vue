@@ -1,10 +1,44 @@
 <template>
-    <div>
-        <p v-text="user"></p>
+    <div class="profile-container" v-show="loaded">
+        <b-card>
+            <b-card-title>Edit Profile</b-card-title>
         <b-form>
+            <div id="static-form-container">
+                <b-card>
+                    <b-form-input
+                            id="forename"
+                            placeholder="First Name"
+                            v-model="forename"
+                            required
+                    ></b-form-input>
+
+                    <b-form-input
+                            id="surname"
+                            placeholder="Last Name"
+                            v-model="surname"
+                            required
+                    ></b-form-input>
+
+                    <b-form-datepicker
+                            id="dob"
+                            v-model="dob"
+                            :date-format-options="{day: numerical, month: numerical, year: numerical}"
+                            show-decade-nav
+                            required
+                    ></b-form-datepicker>
+
+                    <b-form-textarea
+                            id="medical"
+                            placeholder="Medical notes..."
+                            v-model="medical"
+                    ></b-form-textarea>
+                </b-card>
+            </div>
+            <br>
             <div id="address-container">
                 <b-button class="addButton" @click="addAddress">Add Address</b-button>
                 <div id="address" v-for="(add, counter) in address" v-bind:key="counter">
+                    <b-card>
                     <b-form-input
                             id="line1"
                             placeholder="Line 1"
@@ -44,11 +78,14 @@
                             required
                     ></b-form-input>
                     <b-button class="deleteButton" @click="deleteAddress(counter)">Delete Address</b-button>
+                    </b-card>
                 </div>
             </div>
+            <br>
             <div id="phone-container">
                 <b-button class="addButton" @click="addPhone">Add Phone</b-button>
                 <div id="phone" v-for="(add, counter) in phone" v-bind:key="counter">
+                    <b-card>
                     <b-form-input
                             id="phone"
                             placeholder="Phone Number"
@@ -56,11 +93,14 @@
                             required
                     ></b-form-input>
                     <b-button class="deleteButton" @click="deletePhone(counter)">Delete Phone</b-button>
+                    </b-card>
                 </div>
             </div>
+            <br>
             <div id="idNumber-container">
                 <b-button class="addButton" @click="addID">Add ID</b-button>
                 <div id="idNumber" v-for="(add, counter) in idNumber" v-bind:key="counter">
+                    <b-card>
                     <b-form-input
                             id="name"
                             placeholder="ID Type (Driving Licence, Student Card, Passport, etc)"
@@ -75,21 +115,25 @@
                             required
                     ></b-form-input>
                     <b-button class="deleteButton" @click="deleteID(counter)">Delete ID</b-button>
+                    </b-card>
                 </div>
             </div>
-            <b-button @click="onSubmit">Submit</b-button>
+            <br>
+            <b-button @click="onSubmit" :disabled="!loaded">Submit</b-button>
         </b-form>
+        </b-card>
     </div>
 </template>
 
 <script>
     import axios from "axios";
-    import JWTManager from "../../../../components/JWTManager";
+    import JWTManager from "../../../components/JWTManager";
     export default {
         name: "EditUser",
         components: {},
         data() {
             return {
+                loaded: false,
                 user: {},
                 forename: '',
                 surname: '',
@@ -130,6 +174,7 @@
                             if(Array.isArray(msg.data.message.ice.contacts)){
                                 this.contacts = msg.data.message.ice.contacts;
                             }
+                            this.loaded = true;
                         }
                         return msg;
                     })
@@ -187,13 +232,14 @@
                 })
                 .then(msg => {
                     if(msg.data.success === true){
-                        alert("Success");
+                        this.$emit('success', true);
                     } else {
-                        alert(msg.data.message);
+                        this.$emit('success', false);
                     }
                 })
                 .catch(err => {
                     alert(err + '\n' + JSON.stringify(json));
+                    this.$emit('success', false);
                 });
             }
         },

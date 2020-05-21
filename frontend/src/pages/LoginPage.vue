@@ -1,6 +1,6 @@
 <template>
     <div>
-        <StaticNav />
+        <AppNav />
         <b-container fluid>
             <LoginForm />
         </b-container>
@@ -8,11 +8,11 @@
 </template>
 
 <script>
-    import StaticNav from "../components/layout/StaticNav";
+    import AppNav from "../components/layout/AppNav";
     import LoginForm from "../components/LoginForm";
     export default {
         name: "LoginPage",
-        components: {LoginForm, StaticNav}
+        components: {LoginForm, AppNav}
     }
 </script>
 

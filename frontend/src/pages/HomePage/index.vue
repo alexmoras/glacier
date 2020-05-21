@@ -1,6 +1,6 @@
 <template>
     <div>
-        <StaticNav />
+        <AppNav />
         <b-container fluid>
             <b-card-title>
                 Home Page
@@ -10,11 +10,11 @@
 </template>
 
 <script>
-    import StaticNav from "../../components/layout/StaticNav";
+    import AppNav from "../../components/layout/AppNav";
 
     export default {
         name: "HomePage",
-        components: {StaticNav}
+        components: {AppNav}
     }
 </script>
 

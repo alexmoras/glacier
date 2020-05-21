@@ -1,6 +1,6 @@
 <template>
     <div>
-        <StaticNav />
+        <AppNav />
         <b-container fluid>
 
         </b-container>
@@ -8,13 +8,13 @@
 </template>
 
 <script>
-    import StaticNav from "../components/layout/StaticNav";
+    import AppNav from "../components/layout/AppNav";
     import JWTManager from "../components/JWTManager";
     import axios from "axios";
     import qs from "querystring";
     export default {
         name: "TokenPage",
-        components: {StaticNav},
+        components: {AppNav},
         created() {
             let token = this.$route.params.token;
             axios({
