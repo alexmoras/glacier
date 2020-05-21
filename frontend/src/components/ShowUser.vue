@@ -1,47 +1,98 @@
 <template>
     <b-container fluid="" id="user-container">
-        <b-card class="details-container">
-            <b-card-body>
-                <b-card-text class="text-name">{{forename}} {{surname}}</b-card-text>
-                <b-card-text class="text-dob">{{dob}}</b-card-text>
-            </b-card-body>
-        </b-card>
-        <b-card class="contacts-container" no-body>
+        <b-card id="details-container" no-body>
             <b-list-group flush>
-                <div v-for="(contact, contactCounter) in contacts" v-bind:key="'Contact: ' + contactCounter">
-                    <b-list-group-item>
+                <b-list-group-item>
+                    <b-card-body class="text-center">
+                        <b-card-text class="text-name"><h2>{{forename}} {{surname}}</h2></b-card-text>
+                        <b-card-text class="text-dob"><h3>{{dob}}</h3></b-card-text>
+                    </b-card-body>
+                </b-list-group-item>
+                <b-list-group-item>
+                    <b-card-title>
+                        Medical Notes:
+                    </b-card-title>
+                    <b-card-body>
+                        <b-card-text v-text="medical"></b-card-text>
+                    </b-card-body>
+                </b-list-group-item>
+            </b-list-group>
+            <b-card-group deck id="container-user-deck">
+                <b-card>
+                    <span v-b-toggle="'user-id'">
+                        <b-card-title class="toggled-closed">ID Number <font-awesome-icon :icon='["far", "chevron-down"]'></font-awesome-icon></b-card-title>
+                        <b-card-title class="toggled-open">ID Number <font-awesome-icon :icon='["far", "chevron-right"]'></font-awesome-icon></b-card-title>
+                    </span>
+                    <b-collapse id="user-id">
+                        <b-card-body v-for="(idNumber, idCounter) in idNumber" v-bind:key="'ID' + idCounter">
+                            <b-card-text>{{idNumber.name}}: {{idNumber.value}}</b-card-text>
+                        </b-card-body>
+                    </b-collapse>
+                </b-card>
+                <b-card>
+                    <span v-b-toggle="'user-address'">
+                        <b-card-title class="toggled-closed">Address <font-awesome-icon :icon='["far", "chevron-down"]'></font-awesome-icon></b-card-title>
+                        <b-card-title class="toggled-open">Address <font-awesome-icon :icon='["far", "chevron-right"]'></font-awesome-icon></b-card-title>
+                    </span>
+                    <b-collapse id="user-address">
+                        <b-card-body v-for="(add, addCounter) in address" v-bind:key="'Address' + addCounter">
+                            <b-card-text>
+                                {{add.line1}}, {{add.line2}} {{add.town}}, {{add.county}}, {{add.country}}, {{add.postcode}}
+                            </b-card-text>
+                        </b-card-body>
+                    </b-collapse>
+                </b-card>
+                <b-card>
+                    <span v-b-toggle="'user-phone'">
+                        <b-card-title class="toggled-closed">Phone <font-awesome-icon :icon='["far", "chevron-down"]'></font-awesome-icon></b-card-title>
+                        <b-card-title class="toggled-open">Phone <font-awesome-icon :icon='["far", "chevron-right"]'></font-awesome-icon></b-card-title>
+                    </span>
+                    <b-collapse id="user-phone">
+                        <b-card-body v-for="(singlePhone, phoneCounter) in phone" v-bind:key="'Phone' + phoneCounter">
+                            <b-card-text>
+                                {{phone[phoneCounter]}}
+                            </b-card-text>
+                        </b-card-body>
+                    </b-collapse>
+                </b-card>
+            </b-card-group>
+        </b-card>
+        <b-card id="contacts-container" >
+            <b-card-title>Contacts</b-card-title>
+            <b-card-group deck>
+                <b-card v-for="(contact, contactCounter) in contacts" v-bind:key="'Contact: ' + contactCounter">
+                    <b-card-title>
                         <b-card-text class="text-contact-name">{{contact.forename}} {{contact.surname}}</b-card-text>
+                    </b-card-title>
+                    <b-card-sub-title>
                         <b-card-text class="text-contact-relationship">{{contact.relationship}}</b-card-text>
+                    </b-card-sub-title>
 
-                        <b-card-text>
+                    <b-card-body>
+                        <b-card-text class="toggle-text">
                         <span v-b-toggle="'contact-phone-collapse-' + contactCounter">
                             <span class="toggled-closed">Phone <font-awesome-icon :icon='["far", "chevron-down"]'></font-awesome-icon></span><span class="toggled-open">Phone <font-awesome-icon :icon='["far", "chevron-right"]'></font-awesome-icon></span>
                         </span>
                         </b-card-text>
                         <b-collapse :id="'contact-phone-collapse-' + contactCounter">
                             <div class="container-contact-phone" v-for="(contactPhone, contactPhoneCounter) in contact.phone" v-bind:key="'ContactPhone: ' + contactPhoneCounter">
-                                <b-card-text>{{contact.phone[contactPhoneCounter]}}</b-card-text>
+                                <b-card-text class="drop-text">{{contact.phone[contactPhoneCounter]}}</b-card-text>
                             </div>
                         </b-collapse>
 
-                        <b-card-text>
+                        <b-card-text class="toggle-text">
                         <span v-b-toggle="'contact-address-collapse-' + contactCounter">
                             <span class="toggled-closed">Address <font-awesome-icon :icon='["far", "chevron-down"]'></font-awesome-icon></span><span class="toggled-open">Address <font-awesome-icon :icon='["far", "chevron-right"]'></font-awesome-icon></span>
                         </span>
                         </b-card-text>
                         <b-collapse :id="'contact-address-collapse-' + contactCounter">
-                            <div class="container-contact-phone" v-for="(contactAddress, contactAddressCounter) in contact.address" v-bind:key="'ContactAddress: ' + contactAddressCounter">
-                                <b-card-text>{{contactAddress.line1}}</b-card-text>
-                                <b-card-text>{{contactAddress.line2}}</b-card-text>
-                                <b-card-text>{{contactAddress.town}}</b-card-text>
-                                <b-card-text>{{contactAddress.county}}</b-card-text>
-                                <b-card-text>{{contactAddress.country}}</b-card-text>
-                                <b-card-text>{{contactAddress.postcode}}</b-card-text>
+                            <div class="container-contact-address" v-for="(contactAddress, contactAddressCounter) in contact.address" v-bind:key="'ContactAddress: ' + contactAddressCounter">
+                                <b-card-text class="drop-text">{{contactAddress.line1}}, {{contactAddress.line2}} {{contactAddress.town}}, {{contactAddress.county}}, {{contactAddress.country}}, {{contactAddress.postcode}}</b-card-text>
                             </div>
                         </b-collapse>
-                    </b-list-group-item>
-                </div>
-            </b-list-group>
+                    </b-card-body>
+                </b-card>
+            </b-card-group>
         </b-card>
     </b-container>
 </template>
@@ -140,5 +191,35 @@
     .collapsed > .toggled-closed,
     .not-collapsed > .toggled-open {
         display: none;
+    }
+    #user-container{
+        margin-top: 2.0rem;
+        margin-bottom: 4.0rem;
+    }
+    #container-user-deck{
+        padding: 1.0rem;
+        padding-top: 2.0rem;
+    }
+    #details-container{
+        padding: 1.0rem;
+    }
+    #contacts-container{
+        margin-top: 4.0rem;
+        margin-bottom: 2.0rem;
+        padding-left: 1.0rem;
+        padding-right: 1.0rem;
+        padding-bottom: 1.0rem;
+    }
+    .container-contact-phone{
+        padding-bottom: 1.0rem;
+    }
+    .container-contact-address{
+        padding-bottom: 1.0rem;
+    }
+    .toggle-text{
+        font-weight: 600;
+    }
+    .drop-text{
+        font-weight: 400;
     }
 </style>

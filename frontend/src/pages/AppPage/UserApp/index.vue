@@ -1,8 +1,8 @@
 <template>
     <b-container fluid="lg" id="container-user">
-        <b-row>
-            <b-col cols="6"><b-button id="button-edit-user" variant="outline-dark" squared @click="editUser">Edit Profile</b-button></b-col>
-            <b-col cols="6"><b-button id="button-edit-contact" variant="outline-dark" squared @click="editContact">Edit Contacts</b-button></b-col>
+        <b-row class="text-center edit-buttons">
+            <b-col cols="6"><b-button size="lg" id="button-edit-user" variant="outline-primary" squared @click="editUser">Edit Profile</b-button></b-col>
+            <b-col cols="6"><b-button size="lg" id="button-edit-contact" variant="outline-primary" squared @click="editContact">Edit Contacts</b-button></b-col>
         </b-row>
         <b-row>
             <b-col>
@@ -108,5 +108,8 @@
 <style scoped>
     #container-user{
         padding-top: 0.5rem;
+    }
+    .edit-buttons{
+        padding-top: 2.0rem;
     }
 </style>
