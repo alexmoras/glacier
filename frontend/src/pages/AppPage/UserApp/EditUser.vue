@@ -1,128 +1,146 @@
 <template>
-    <div class="profile-container" v-show="loaded">
+    <b-container id="profile-container" fluid="" v-show="loaded">
         <b-card>
             <b-card-title>Edit Profile</b-card-title>
-        <b-form>
-            <div id="static-form-container">
-                <b-card>
-                    <b-form-input
-                            id="forename"
-                            placeholder="First Name"
-                            v-model="forename"
-                            required
-                    ></b-form-input>
-
-                    <b-form-input
-                            id="surname"
-                            placeholder="Last Name"
-                            v-model="surname"
-                            required
-                    ></b-form-input>
-
-                    <b-form-datepicker
-                            id="dob"
-                            v-model="dob"
-                            :date-format-options="{day: numerical, month: numerical, year: numerical}"
-                            show-decade-nav
-                            required
-                    ></b-form-datepicker>
-
-                    <b-form-textarea
-                            id="medical"
-                            placeholder="Medical notes..."
-                            v-model="medical"
-                    ></b-form-textarea>
-                </b-card>
-            </div>
-            <br>
-            <div id="address-container">
-                <b-button class="addButton" @click="addAddress">Add Address</b-button>
-                <div id="address" v-for="(add, counter) in address" v-bind:key="counter">
-                    <b-card>
-                    <b-form-input
-                            id="line1"
-                            placeholder="Line 1"
-                            v-model="add.line1"
-                            required
-                    ></b-form-input>
-
-                    <b-form-input
-                            id="line2"
-                            placeholder="Line 2"
-                            v-model="add.line2"
-                    ></b-form-input>
-
-                    <b-form-input
-                            id="town"
-                            placeholder="Town"
-                            v-model="add.town"
-                    ></b-form-input>
-
-                    <b-form-input
-                            id="county"
-                            placeholder="County"
-                            v-model="add.county"
-                    ></b-form-input>
-
-                    <b-form-input
-                            id="country"
-                            placeholder="Country"
-                            v-model="add.country"
-                            required
-                    ></b-form-input>
-
-                    <b-form-input
-                            id="postcode"
-                            placeholder="Post Code"
-                            v-model="add.postcode"
-                            required
-                    ></b-form-input>
-                    <b-button class="deleteButton" @click="deleteAddress(counter)">Delete Address</b-button>
-                    </b-card>
-                </div>
-            </div>
-            <br>
-            <div id="phone-container">
-                <b-button class="addButton" @click="addPhone">Add Phone</b-button>
-                <div id="phone" v-for="(add, counter) in phone" v-bind:key="counter">
-                    <b-card>
-                    <b-form-input
-                            id="phone"
-                            placeholder="Phone Number"
-                            v-model="phone[counter]"
-                            required
-                    ></b-form-input>
-                    <b-button class="deleteButton" @click="deletePhone(counter)">Delete Phone</b-button>
-                    </b-card>
-                </div>
-            </div>
-            <br>
-            <div id="idNumber-container">
-                <b-button class="addButton" @click="addID">Add ID</b-button>
-                <div id="idNumber" v-for="(add, counter) in idNumber" v-bind:key="counter">
-                    <b-card>
-                    <b-form-input
-                            id="name"
-                            placeholder="ID Type (Driving Licence, Student Card, Passport, etc)"
-                            v-model="add.name"
-                            required
-                    ></b-form-input>
-
-                    <b-form-input
-                            id="value"
-                            placeholder="ID Number"
-                            v-model="add.value"
-                            required
-                    ></b-form-input>
-                    <b-button class="deleteButton" @click="deleteID(counter)">Delete ID</b-button>
-                    </b-card>
-                </div>
-            </div>
-            <br>
-            <b-button @click="onSubmit" :disabled="!loaded">Submit</b-button>
-        </b-form>
+            <b-form>
+                <b-list-group flush>
+                    <b-list-group-item>
+                        <b-card-body>
+                            <b-card-text>
+                                <b-form-input
+                                        id="forename"
+                                        placeholder="First Name"
+                                        v-model="forename"
+                                        required
+                                ></b-form-input>
+                            </b-card-text>
+                            <b-card-text>
+                                <b-form-input
+                                        id="surname"
+                                        placeholder="Last Name"
+                                        v-model="surname"
+                                        required
+                                ></b-form-input>
+                            </b-card-text>
+                            <b-card-text>
+                                <b-form-datepicker
+                                        id="dob"
+                                        v-model="dob"
+                                        :date-format-options="{day: numerical, month: numerical, year: numerical}"
+                                        show-decade-nav
+                                        required
+                                ></b-form-datepicker>
+                            </b-card-text>
+                            <b-card-text>
+                                <b-form-textarea
+                                        id="medical"
+                                        placeholder="Medical notes..."
+                                        v-model="medical"
+                                ></b-form-textarea>
+                            </b-card-text>
+                        </b-card-body>
+                    </b-list-group-item>
+                    <b-list-group-item id="container-idNumber">
+                        <b-button variant="success" class="float-right" @click="addID"><font-awesome-icon size="lg" :icon="['fal', 'plus']"></font-awesome-icon></b-button>
+                        <b-card-title>ID Number</b-card-title>
+                        <b-card class="inner-card" id="idNumber" v-for="(add, counter) in idNumber" v-bind:key="counter" no-body>
+                            <b-card-body>
+                                <b-card-text>
+                                    <b-form-input
+                                            id="name"
+                                            placeholder="ID Type (Driving Licence, Student Card, Passport, etc)"
+                                            v-model="add.name"
+                                            required
+                                    ></b-form-input>
+                                </b-card-text>
+                                <b-card-text>
+                                    <b-form-input
+                                            id="value"
+                                            placeholder="ID Number"
+                                            v-model="add.value"
+                                            required
+                                    ></b-form-input>
+                                </b-card-text>
+                            </b-card-body>
+                            <b-button size="sm" variant="outline-danger" class="float-right" @click="deleteID(counter)"><font-awesome-icon size="lg" :icon="['fal', 'times']"></font-awesome-icon></b-button>
+                        </b-card>
+                    </b-list-group-item>
+                    <b-list-group-item id="container-phone">
+                        <b-button class="float-right" variant="success" @click="addPhone"><font-awesome-icon size="lg" :icon="['fal', 'plus']"></font-awesome-icon></b-button>
+                        <b-card-title>Phone</b-card-title>
+                        <b-card class="inner-card" id="phone" v-for="(add, counter) in phone" v-bind:key="counter" no-body>
+                            <b-card-body>
+                                <b-card-text>
+                                    <b-form-input
+                                            id="phone"
+                                            placeholder="Phone Number"
+                                            v-model="phone[counter]"
+                                            required
+                                    ></b-form-input>
+                                </b-card-text>
+                            </b-card-body>
+                            <b-button size="sm" variant="outline-danger" class="float-right" @click="deletePhone(counter)"><font-awesome-icon size="lg" :icon="['fal', 'times']"></font-awesome-icon></b-button>
+                        </b-card>
+                    </b-list-group-item>
+                    <b-list-group-item id="container-address">
+                        <b-button variant="success" class="float-right" @click="addAddress"><font-awesome-icon size="lg" :icon="['fal', 'plus']"></font-awesome-icon></b-button>
+                        <b-card-title>Address</b-card-title>
+                        <b-card class="inner-card" id="address" v-for="(add, counter) in address" v-bind:key="counter" no-body>
+                            <b-card-body>
+                                <b-card-text>
+                                    <b-form-input
+                                            id="line1"
+                                            placeholder="Line 1"
+                                            v-model="add.line1"
+                                            required
+                                    ></b-form-input>
+                                </b-card-text>
+                                <b-card-text>
+                                    <b-form-input
+                                            id="line2"
+                                            placeholder="Line 2"
+                                            v-model="add.line2"
+                                    ></b-form-input>
+                                </b-card-text>
+                                <b-card-text>
+                                    <b-form-input
+                                            id="town"
+                                            placeholder="Town"
+                                            v-model="add.town"
+                                    ></b-form-input>
+                                </b-card-text>
+                                <b-card-text>
+                                    <b-form-input
+                                            id="county"
+                                            placeholder="County"
+                                            v-model="add.county"
+                                    ></b-form-input>
+                                </b-card-text>
+                                <b-card-text>
+                                    <b-form-input
+                                            id="country"
+                                            placeholder="Country"
+                                            v-model="add.country"
+                                            required
+                                    ></b-form-input>
+                                </b-card-text>
+                                <b-card-text>
+                                    <b-form-input
+                                            id="postcode"
+                                            placeholder="Post Code"
+                                            v-model="add.postcode"
+                                            required
+                                    ></b-form-input>
+                                </b-card-text>
+                            </b-card-body>
+                            <b-button size="sm" variant="outline-danger" class="float-right" @click="deleteAddress(counter)"><font-awesome-icon size="lg" :icon="['fal', 'times']"></font-awesome-icon></b-button>
+                        </b-card>
+                    </b-list-group-item>
+                    <b-button variant="primary" @click="onSubmit" :disabled="!loaded">Submit</b-button>
+                </b-list-group>
+            </b-form>
         </b-card>
-    </div>
+    </b-container>
 </template>
 
 <script>
@@ -136,6 +154,7 @@
         data() {
             return {
                 loaded: false,
+                processing: false,
                 forename: '',
                 surname: '',
                 dob: '',
@@ -275,5 +294,8 @@
 </script>
 
 <style scoped>
-
+    .inner-card{
+        margin-top: 1.0rem;
+        margin-bottom: 1.0rem;
+    }
 </style>

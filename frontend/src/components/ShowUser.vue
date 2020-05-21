@@ -3,6 +3,7 @@
         <b-card id="details-container" no-body>
             <b-list-group flush>
                 <b-list-group-item>
+                    <b-button class="float-right" variant="secondary" v-if="edit === true" @click="editUser" squared>Edit <font-awesome-icon :icon="['far', 'edit']"></font-awesome-icon></b-button>
                     <b-card-body class="text-center">
                         <b-card-text class="text-name"><h2>{{forename}} {{surname}}</h2></b-card-text>
                         <b-card-text class="text-dob"><h3>{{dob}}</h3></b-card-text>
@@ -57,7 +58,8 @@
                 </b-card>
             </b-card-group>
         </b-card>
-        <b-card id="contacts-container" >
+        <b-card id="contacts-container">
+            <b-button class="float-right" variant="secondary" v-if="edit === true" @click="editContacts" squared>Edit <font-awesome-icon :icon="['far', 'edit']"></font-awesome-icon></b-button>
             <b-card-title>Contacts</b-card-title>
             <b-card-group deck>
                 <b-card v-for="(contact, contactCounter) in contacts" v-bind:key="'Contact: ' + contactCounter">
@@ -105,7 +107,7 @@
     export default {
         name: "ShowUser",
         components: {},
-        props: ["userParam", "user"],
+        props: ["userParam", "user", "edit"],
         data() {
             return {
                 loaded: false,
@@ -155,6 +157,12 @@
                         return err;
                     })
             },
+            editContacts(){
+                this.$emit('editContacts', true);
+            },
+            editUser(){
+                this.$emit('editUser', true);
+            }
         },
         computed: {
         },

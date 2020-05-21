@@ -1,14 +1,14 @@
 <template>
     <b-container fluid="lg" id="container-user">
-        <b-row class="text-center edit-buttons">
-            <b-col cols="6"><b-button size="lg" id="button-edit-user" variant="outline-primary" squared @click="editUser">Edit Profile</b-button></b-col>
-            <b-col cols="6"><b-button size="lg" id="button-edit-contact" variant="outline-primary" squared @click="editContact">Edit Contacts</b-button></b-col>
-        </b-row>
         <b-row>
             <b-col>
-            <ShowUser v-if="showUserToggle === true" v-bind:userParam="'me'" v-bind:user="user" />
-            <EditUser v-if="editUserToggle === true" v-on:success="editComplete($event)" v-bind:user="user" />
-            <EditContact v-if="editContactToggle === true" v-on:success="editComplete($event)" v-bind:user="user" />
+                <b-container fluid="lg">
+                    <b-alert variant="success" :show="editSuccess">Changes have been saved successfully.</b-alert>
+                    <b-alert variant="danger" :show="editError">An error occurred whilst saving changes. Please try again.</b-alert>
+                </b-container>
+                <ShowUser v-if="showUserToggle === true" v-bind:userParam="'me'" v-bind:user="user" v-bind:edit="true" v-on:editContacts="editContact" v-on:editUser="editUser" />
+                <EditUser v-if="editUserToggle === true" v-on:success="editComplete($event)" v-bind:user="user" />
+                <EditContact v-if="editContactToggle === true" v-on:success="editComplete($event)" v-bind:user="user" />
             </b-col>
         </b-row>
     </b-container>
@@ -31,6 +31,8 @@
                 showUserToggle: false,
                 editUserToggle: false,
                 editContactToggle: false,
+                editSuccess: false,
+                editError: false
             }
         },
         methods: {
@@ -79,13 +81,13 @@
                     .then(() => {
                         this.$forceUpdate();
                         this.showUser();
+                        this.editSuccess = true;
                     })
-                    .catch(err => {
-                        alert(err);
+                    .catch(() => {
+                        this.editError = true;
                     })
-                    // Show a success message!
                 } else {
-                    alert("An error occurred. Sorry!");
+                    this.editError = true;
                 }
             }
         },
@@ -108,8 +110,5 @@
 <style scoped>
     #container-user{
         padding-top: 0.5rem;
-    }
-    .edit-buttons{
-        padding-top: 2.0rem;
     }
 </style>

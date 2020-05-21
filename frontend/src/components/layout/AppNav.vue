@@ -11,7 +11,7 @@
             </b-navbar-nav>
             <b-navbar-nav class="ml-auto" v-if="loggedIn === true">
                 <b-nav-text class="text-welcome" v-if="forename != null && forename != ''">Hi there, {{forename}}!</b-nav-text>
-                <b-nav-text class="text-welcome" v-else>Hello friend!</b-nav-text>
+                <b-nav-text class="text-welcome" v-else>Hello! How are you?</b-nav-text>
                 <b-nav-item>
                     <b-button class="btn-block" variant="success" squared @click="loadApp">Dashboard</b-button>
                 </b-nav-item>
