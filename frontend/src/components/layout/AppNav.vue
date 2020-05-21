@@ -13,7 +13,7 @@
                 <b-nav-text class="text-welcome" v-if="forename != null && forename != ''">Hi there, {{forename}}!</b-nav-text>
                 <b-nav-text class="text-welcome" v-else>Hello friend!</b-nav-text>
                 <b-nav-item>
-                    <b-button class="btn-block" variant="success" squared to="/app">Dashboard</b-button>
+                    <b-button class="btn-block" variant="success" squared @click="loadApp">Dashboard</b-button>
                 </b-nav-item>
                 <b-nav-item>
                     <b-button class="btn-block" variant="dark" exact exact-active-class="active-btn-login" squared @click="logout">Logout</b-button>
@@ -43,6 +43,13 @@
         methods: {
             loginStatus(){
                 this.loggedIn = JWTManager.methods.getJWT() != null;
+            },
+            loadApp(){
+                if(this.$route.path === "/app"){
+                    this.$router.go(0);
+                } else {
+                    this.$router.push("/app");
+                }
             },
             logout(){
                 JWTManager.methods.deleteJWT();

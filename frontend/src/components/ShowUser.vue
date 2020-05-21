@@ -49,6 +49,7 @@
 <script>
     import axios from "axios";
     import JWTManager from "./JWTManager";
+    import config from "../../config";
 
     export default {
         name: "ShowUser",
@@ -71,7 +72,7 @@
             getUser(){
                 axios({
                     method: 'get',
-                    url: '/users/' + this.userParam,
+                    url: config.apiUrl + '/users/' + this.userParam,
                     headers: JWTManager.methods.getJWTHeader()
                 })
                     .then(msg => {

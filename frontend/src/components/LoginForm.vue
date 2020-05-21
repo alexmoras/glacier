@@ -38,7 +38,7 @@
                 evt.preventDefault()
                 axios({
                     method: "post",
-                    url: "/auth/login",
+                    url: config.apiUrl + "/auth/login",
                     data: qs.stringify({
                         email: this.form.email,
                         url: config.url + "/login/"

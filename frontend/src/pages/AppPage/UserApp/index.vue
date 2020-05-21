@@ -20,6 +20,7 @@
     import EditContact from "./EditContact";
     import axios from "axios";
     import JWTManager from "../../../components/JWTManager";
+    import config from "../../../../config";
     export default {
         name: "UserApp",
         components: {EditContact, EditUser, ShowUser},
@@ -42,7 +43,7 @@
                 }
                 return axios({
                     method: 'get',
-                    url: '/users/' + userParam,
+                    url: config.apiUrl + '/users/' + userParam,
                     headers: JWTManager.methods.getJWTHeader()
                 })
                 .then(msg => {
@@ -94,8 +95,8 @@
             .then(() => {
                 this.showUser();
             })
-            .catch(err => {
-                alert(err);
+            .catch(() => {
+                this.$router.push("/login");
             })
             if(this.user.forename === null || this.user.forename === ''){
                 // Get-started Wizard

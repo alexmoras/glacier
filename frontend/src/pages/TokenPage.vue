@@ -12,6 +12,7 @@
     import JWTManager from "../components/JWTManager";
     import axios from "axios";
     import qs from "querystring";
+    import config from "../../config";
     export default {
         name: "TokenPage",
         components: {AppNav},
@@ -19,7 +20,7 @@
             let token = this.$route.params.token;
             axios({
                 method: "post",
-                url: "/auth/token",
+                url: config.apiUrl + "/auth/token",
                 data: qs.stringify({
                     token: token
                 })

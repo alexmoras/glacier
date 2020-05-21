@@ -128,6 +128,7 @@
 <script>
     import axios from "axios";
     import JWTManager from "../../../components/JWTManager";
+    import config from "../../../../config";
     export default {
         name: "EditUser",
         props: ["user"],
@@ -149,7 +150,7 @@
             getSelf(){
                 axios({
                     method: 'get',
-                    url: '/users/me',
+                    url: config.apiUrl + '/users/me',
                     headers: JWTManager.methods.getJWTHeader()
                 })
                     .then(msg => {
@@ -222,7 +223,7 @@
                 };
                 axios({
                     method: 'put',
-                    url: '/users/me/ice',
+                    url: config.apiUrl + '/users/me/ice',
                     data: JSON.stringify(json),
                     headers: {
                         'Authorization': 'Bearer ' + JWTManager.methods.getJWT(),
