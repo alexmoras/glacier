@@ -2,7 +2,6 @@
     <b-container fluid="" id="user-container">
         <b-card class="details-container">
             <b-card-body>
-                <p v-text="user"></p>
                 <b-card-text class="text-name">{{forename}} {{surname}}</b-card-text>
                 <b-card-text class="text-dob">{{dob}}</b-card-text>
             </b-card-body>

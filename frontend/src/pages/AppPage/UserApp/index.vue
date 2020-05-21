@@ -7,8 +7,8 @@
         <b-row>
             <b-col>
             <ShowUser v-if="showUserToggle === true" v-bind:userParam="'me'" v-bind:user="user" />
-            <EditUser v-if="editUserToggle === true" v-on:success="editComplete($event)" />
-            <EditContact v-if="editContactToggle === true" v-on:success="editComplete($event)" />
+            <EditUser v-if="editUserToggle === true" v-on:success="editComplete($event)" v-bind:user="user" />
+            <EditContact v-if="editContactToggle === true" v-on:success="editComplete($event)" v-bind:user="user" />
             </b-col>
         </b-row>
     </b-container>
@@ -49,8 +49,11 @@
                     if(msg.data.success === true){
                         this.user = msg.data.message;
                         this.loaded = true;
+                        return msg.data.message;
                     }
-                    return msg.data.message;
+                    else {
+                        throw new Error(msg.data);
+                    }
                 })
             },
             showUser(){
@@ -70,8 +73,15 @@
             },
             editComplete(success){
                 if(success === true){
-                    this.getUser();
-                    this.showUser();
+                    this.loaded = false;
+                    this.getUser()
+                    .then(() => {
+                        this.$forceUpdate();
+                        this.showUser();
+                    })
+                    .catch(err => {
+                        alert(err);
+                    })
                     // Show a success message!
                 } else {
                     alert("An error occurred. Sorry!");

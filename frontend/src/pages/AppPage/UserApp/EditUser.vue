@@ -130,11 +130,11 @@
     import JWTManager from "../../../components/JWTManager";
     export default {
         name: "EditUser",
+        props: ["user"],
         components: {},
         data() {
             return {
                 loaded: false,
-                user: {},
                 forename: '',
                 surname: '',
                 dob: '',
@@ -154,7 +154,6 @@
                 })
                     .then(msg => {
                         if(msg.data.success === true){
-                            this.user = msg.data.message;
                             this.forename = msg.data.message.ice.forename;
                             this.surname = msg.data.message.ice.surname;
                             this.dob = msg.data.message.ice.dob;
@@ -246,7 +245,30 @@
         computed: {
         },
         created() {
-            this.getSelf();
+            if(this.user != null){
+                this.forename = this.user.ice.forename;
+                this.surname = this.user.ice.surname;
+                this.dob = this.user.ice.dob;
+                this.medical = this.user.ice.medical;
+                if(Array.isArray(this.user.ice.address)){
+                    this.address = this.user.ice.address;
+                }
+
+                if(Array.isArray(this.user.ice.phone)){
+                    this.phone = this.user.ice.phone;
+                }
+
+                if(Array.isArray(this.user.ice.idNumber)){
+                    this.idNumber = this.user.ice.idNumber;
+                }
+
+                if(Array.isArray(this.user.ice.contacts)){
+                    this.contacts = this.user.ice.contacts;
+                }
+                this.loaded = true;
+            } else {
+                this.getUser();
+            }
         }
     }
 </script>
