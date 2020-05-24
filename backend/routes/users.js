@@ -23,11 +23,12 @@ router.get('/:user', (req, res, next) => {
     if (req.params.user === "me" || userLoader.has_staff_permission(req.user) || req.user.id === req.params.user){
         User.findById(requestedUser)
             .then(user => {
-                if(user){
-                    return userLoader.get_all(user);
-                } else {
-                    responder.failure(res, 200, 404, "User does not exist.");
+                if(!user){
+                    let err = new Error("User was not found.");
+                    err.status = 200;
+                    throw err;
                 }
+                return userLoader.get_all(user);
             })
             .then(all => {
                 if(all){
@@ -36,17 +37,15 @@ router.get('/:user', (req, res, next) => {
             })
             .catch(err => {
                 if(err.name === "CastError"){
-                    responder.failure(res, 200, 404, "User does not exist.");
-                } else {
-                    responder.failure(res, 500, 500, "An error occurred.", err);
+                    err = new Error("User was not found.");
+                    err.status = 200;
                 }
-            })
+                next(err);
+            });
     } else {
-        responder.failure(res, 401, 401, "Not authorised.", {
-            "action": "User attempted to access a resource they do not have access to.",
-            "by": req.user.id,
-            "on": requestedUser
-        });
+        let err = new Error("Unauthorized: User " + req.user + " attempted to access a resource " + req.params.user + " they do not have access to.");
+        err.status = 401;
+        next(err);
     }
 });
 
@@ -66,13 +65,14 @@ router.put('/:user/ice', (req, res, next) => {
                     data.user = user.id;
                     return IceUser.validate(data).then(() => {return data});
                 } else {
-                    responder.failure(res, 200, 404, "User was not found.");
+                    let err = new Error("User was not found.");
+                    err.status = 200;
+                    throw err;
                 }
             })
             .then(data => {
                 return userLoader.put_ice(data);
             })
-            // Check that PUT completed and send response.
             .then(ice => {
                 if(ice){
                     responder.success(res, 201, 201, ice);
@@ -80,18 +80,15 @@ router.put('/:user/ice', (req, res, next) => {
             })
             .catch(err => {
                 if(err.name === "ValidationError"){
-                    responder.failure(res, 400, 400, "Bad request. Please check the payload and try again.");
-                } else {
-                    responder.failure(res, 500, 500, "An error occurred.", err);
+                    let err = new Error("Bad request. Please check the payload and try again.");
+                    err.status = 400;
                 }
+                next(err);
             });
     } else {
-        responder.failure(res, 401, 401, "Not authorised.", {
-            "action": "PUT",
-            "url": "/" + req.params.user + "ice",
-            "by": req.user.id,
-            "on": requestedUser
-        });
+        let err = new Error("Unauthorized: User " + req.user + " attempted to access a resource " + req.params.user + " they do not have access to.");
+        err.status = 401;
+        next(err);
     }
 });
 
@@ -110,7 +107,9 @@ router.put('/:user/service', (req, res, next) => {
                     data.user = user.id;
                     return ServiceUser.validate(data).then(() => {return data});
                 } else {
-                    responder.failure(res, 200, 404, "User was not found.");
+                    let err = new Error("User was not found.");
+                    err.status = 200;
+                    throw err;
                 }
             })
             .then(data => {
@@ -124,18 +123,15 @@ router.put('/:user/service', (req, res, next) => {
             })
             .catch(err => {
                 if(err.name === "ValidationError"){
-                    responder.failure(res, 400, 400, "Bad request. Please check the payload and try again.");
-                } else {
-                    responder.failure(res, 500, 500, "An error occurred.", err);
+                    let err = new Error("Bad request. Please check the payload and try again.");
+                    err.status = 400;
                 }
+                next(err);
             });
     } else {
-        responder.failure(res, 401, 401, "Not authorised.", {
-            "action": "PUT",
-            "url": "/" + req.params.user + "service",
-            "by": req.user.id,
-            "on": requestedUser
-        });
+        let err = new Error("Unauthorized: User " + req.user + " attempted to access a resource " + req.params.user + " they do not have access to.");
+        err.status = 401;
+        next(err);
     }
 });
 

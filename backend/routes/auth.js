@@ -1,5 +1,5 @@
-var express = require('express');
-var router = express.Router();
+const express = require('express');
+const router = express.Router();
 const jwt = require('../helpers/jwt');
 const User = require('../models/user');
 const EmailToken = require('../models/email-token');
@@ -27,22 +27,17 @@ router.post('/login', (req, res, next) => {
                 let err = new Error("No reCaptcha token was provided.");
                 err.status = 401;
                 throw err;
-            } else{
-                return EmailToken({ email: email }).save();
             }
+            return EmailToken({ email: email }).save();
         })
         .then(email_token => {
-            mailer.send({
+            return mailer.send({
                 to: email,
                 token: email_token.id
             }, "email_token", url)
-                .then(() => {
-                    responder.success(res, 202, 202, "A magic link has been sent to the user.");
-                })
-                .catch(err => {
-                    responder.failure(res, 500, 500, "An error has occurred. Please try again later",
-                        err);
-                })
+        })
+        .then(() => {
+            responder.success(res, 202, 202, "A magic link has been sent to the user.");
         })
         .catch(err => {
             next(err);
@@ -55,30 +50,26 @@ router.post('/token', (req, res, next) => {
     EmailToken.findById(token)
         .then(token => {
             if(!token){
-                responder.failure(res, 404, 404, "The provided token was invalid.");
-            } else {
-                User.findOne({"email": token.email})
-                    .then(user => {
-                        if (!user) {
-                            user = User({"email": token.email});
-                            user.save()
-                                .catch(err => {
-                                    responder.failure(res, 500, 500, "An error has occurred. Please try again later",
-                                        err);
-                                });
-                        }
-                        responder.success(res, 202, 202, {"token": jwt.generate(user)});
-                        token.remove();
-                    })
-                    .catch(err => {
-                        responder.failure(res, 500, 500, "An error has occurred. Please try again later",
-                            err);
-                    });
+                let err = new Error("The provided token was invalid.");
+                err.status = 404;
+                throw err;
             }
+            token.remove();
+            return User.findOne({"email": token.email})
+        })
+        .then(user => {
+            if (!user) {
+                user = User({"email": token.email});
+                user.save();
+            }
+            responder.success(res, 202, 202, {"token": jwt.generate(user)});
         })
         .catch(err => {
-            responder.failure(res, 500, 500, "An error has occurred. Please try again later",
-                err);
+            if(err.name === "CastError"){
+                err = new Error("Token was not found.");
+                err.status = 404;
+            }
+            next(err);
         });
 });
 
