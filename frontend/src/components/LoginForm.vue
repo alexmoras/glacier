@@ -16,6 +16,13 @@
                         required
                         placeholder="Enter email"
                 ></b-form-input>
+                <b-form-text>
+                    <vue-recaptcha
+                            ref="recaptcha"
+                            @verify="verifyRecaptcha"
+                            :sitekey="recaptcha">
+                    </vue-recaptcha>
+                </b-form-text>
             </b-form-group>
 
             <b-button type="submit" variant="primary" disabled v-if="processing" squared>
@@ -31,8 +38,10 @@
     import axios from "axios";
     import qs from "querystring";
     import config from "../../config";
+    import VueRecaptcha from 'vue-recaptcha';
     export default {
         name: "LoginForm",
+        components: {VueRecaptcha},
         data() {
             return {
                 form: {
@@ -41,20 +50,26 @@
                 show: true,
                 processing: false,
                 successAlert: false,
-                errorAlert: false
+                errorAlert: false,
+                recaptcha: config.recaptcha,
+                recaptchaResponse: ''
             }
         },
         methods: {
+            verifyRecaptcha(response){
+                this.recaptchaResponse = response;
+            },
             onSubmit(evt) {
                 this.successAlert = false;
                 this.errorAlert = false;
                 this.processing = true;
-                evt.preventDefault()
+                evt.preventDefault();
                 axios({
                     method: "post",
                     url: config.apiUrl + "/auth/login",
                     data: qs.stringify({
                         email: this.form.email,
+                        'g-recaptcha-response': this.recaptchaResponse,
                         url: config.url + "/login/"
                     })
                 })
@@ -76,6 +91,11 @@
                         this.$emit('message', err);
                     })
             }
+        },
+        mounted() {
+            let recaptchaScript = document.createElement('script');
+            recaptchaScript.setAttribute('src', 'https://www.google.com/recaptcha/api.js?onload=vueRecaptchaApiLoaded&render=explicit');
+            document.head.appendChild(recaptchaScript);
         }
     }
 </script>

@@ -5,8 +5,8 @@ const User = require('../models/user');
 const EmailToken = require('../models/email-token');
 const responder = require('../helpers/responder');
 const mailer = require('../helpers/mailer');
-const userLoader = require('../helpers/user-loader');
-const passport = require('../helpers/passport');
+const axios = require('axios');
+const config = require('../config');
 
 /* GENERATE MAGIC-LINK AND EMAIL TO USER */
 router.post('/login', (req, res, next) => {
@@ -14,7 +14,23 @@ router.post('/login', (req, res, next) => {
     let url = escape(req.body.url);
     // TODO: add recaptcha
 
-    EmailToken({ email: email }).save()
+    if(req.body['g-recaptcha-response'] === undefined || req.body['g-recaptcha-response'] === '' || req.body['g-recaptcha-response'] === null) {
+        return responder.failure(res, 401, 401, "reCAPTCHA code was not sent in the request body.")
+    }
+    let verificationUrl = "https://www.google.com/recaptcha/api/siteverify?secret=" + config.recaptcha_secret + "&response=" + req.body['g-recaptcha-response'] + "&remoteip=" + req.connection.remoteAddress;
+    axios({
+        method: 'get',
+        url: verificationUrl
+    })
+        .then(response => {
+            if(response.data.success !== undefined && !response.data.success){
+                let err = new Error("No reCaptcha token was provided.");
+                err.status = 401;
+                throw err;
+            } else{
+                return EmailToken({ email: email }).save();
+            }
+        })
         .then(email_token => {
             mailer.send({
                 to: email,
@@ -29,8 +45,7 @@ router.post('/login', (req, res, next) => {
                 })
         })
         .catch(err => {
-            responder.failure(res, 500, 500, "An error has occurred. Please try again later",
-                err);
+            next(err);
         });
 });
 

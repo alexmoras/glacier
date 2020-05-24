@@ -16,5 +16,6 @@ module.exports = {
     db_pass: process.env.DB_PASS || '',
     db_url: process.env.DB_URL || '',
     sentry: process.env.SENTRY || '',
-    jwt_private: process.env.JWT_PRIVATE || ''
+    jwt_private: process.env.JWT_PRIVATE || '',
+    recaptcha_secret: process.env.RECAPTCHA_SECRET || ''
 };
