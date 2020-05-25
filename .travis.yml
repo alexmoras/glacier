@@ -18,7 +18,7 @@ branches:
     - staging
     - development
 before_install:
-- npm install
+- npm install --save-dev
 addons:
   hosts:
   - glacier.alexmoras.com
