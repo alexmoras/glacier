@@ -33,10 +33,10 @@
 
     export default {
         name: "AppNav",
-        props: ["forename"],
         data (){
             return {
-                loggedIn: false
+                loggedIn: false,
+                forename: null
             }
         },
         methods: {
@@ -58,6 +58,7 @@
         },
         created() {
             this.loginStatus();
+            this.forename = JWTManager.methods.getJWTPayload().forename;
         }
     }
 </script>
