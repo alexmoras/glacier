@@ -46,6 +46,7 @@ router.post('/login', (req, res, next) => {
 
 /* EXCHANGE MAGIC-TOKEN FOR A JSON WEB TOKEN (JWT) */
 router.post('/token', (req, res, next) => {
+    let email;
     let token = escape(req.body.token);
     EmailToken.findById(token)
         .then(token => {
@@ -54,14 +55,18 @@ router.post('/token', (req, res, next) => {
                 err.status = 404;
                 throw err;
             }
+            email = token.email;
             token.remove();
-            return User.findOne({"email": token.email})
+            return User.findOne({"email": email})
         })
         .then(user => {
             if (!user) {
-                user = User({"email": token.email});
-                user.save();
+                return User({"email": email}).save();
+            } else {
+                return user.save();
             }
+        })
+        .then(user => {
             responder.success(res, 202, 202, {"token": jwt.generate(user)});
         })
         .catch(err => {
