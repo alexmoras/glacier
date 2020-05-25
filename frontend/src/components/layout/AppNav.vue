@@ -6,11 +6,10 @@
         <b-collapse id="nav-collapse" is-nav>
             <b-navbar-nav>
                 <b-nav-item to="/" exact exact-active-class="active">Home</b-nav-item>
-                <b-nav-item to="/features" exact exact-active-class="active">Features</b-nav-item>
-                <b-nav-item to="/docs" exact exact-active-class="active">Documentation</b-nav-item>
+                <b-nav-item href="https://github.com/alexmoras/glacier/tree/staging" exact exact-active-class="active">GitHub</b-nav-item>
             </b-navbar-nav>
             <b-navbar-nav class="ml-auto" v-if="loggedIn === true">
-                <b-nav-text class="text-welcome" v-if="forename != null && forename != ''">Hi there, {{forename}}!</b-nav-text>
+                <b-nav-text class="text-welcome" v-if="forename != null && forename !== ''">Hi there, {{forename}}!</b-nav-text>
                 <b-nav-text class="text-welcome" v-else>Hello! How are you?</b-nav-text>
                 <b-nav-item>
                     <b-button class="btn-block" variant="success" squared @click="loadApp">Dashboard</b-button>

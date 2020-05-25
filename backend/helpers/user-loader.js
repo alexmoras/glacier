@@ -31,7 +31,6 @@ async function get_all(user) {
 function has_permission(user) {
     Organisation.findOne({"domain": config.domain})
         .then(org => {
-            console.log(check_service_email(user) || org.staff.contains(user) || org.admin.contains(user));
             return check_service_email(user) || org.staff.contains(user) || org.admin.contains(user);
         })
         .catch(() => {

@@ -8,7 +8,7 @@ const IceUser = require('../models/ice-user');
 
 
 router.get('/', (req, res, next) => {
-    if(userLoader.has_permission(req.user) === false){
+    if(userLoader.check_service_email(req.user) === false){
         let err = new Error("Unauthorized: User " + req.user.id + " attempted to access a resource they do not have access to.");
         err.status = 401;
         next(err);
@@ -29,7 +29,6 @@ router.get('/', (req, res, next) => {
         if(req.query.id){
             query["idNumber.value"] = req.query.id;
         }
-        console.log(query);
         IceUser.find(query)
             .then(users => {
                 if(!users){
@@ -49,7 +48,7 @@ router.get('/:user', (req, res, next) => {
     } else {
         requestedUser = req.params.user;
     }
-    if (req.params.user === "me" || userLoader.has_staff_permission(req.user) || req.user.id === req.params.user){
+    if (req.params.user === "me" || userLoader.check_service_email(req.user) === true || req.user.id === req.params.user){
         User.findById(requestedUser)
             .then(user => {
                 if(!user){
@@ -86,7 +85,7 @@ router.put('/:user/ice', (req, res, next) => {
     } else {
         requestedUser = req.params.user;
     }
-    if(req.params.user === "me" || userLoader.has_staff_permission(req.user) || req.user.id === req.params.user){
+    if(req.params.user === "me" || userLoader.has_staff_permission(req.user) === true || req.user.id === req.params.user){
         User.findById(requestedUser)
             .then(user => {
                 if(user){
@@ -128,7 +127,7 @@ router.put('/:user/service', (req, res, next) => {
     } else {
         requestedUser = req.params.user;
     }
-    if(((req.params.user === "me" || req.user.id === req.params.user) && (userLoader.check_service_email(req.user))) || userLoader.has_staff_permission(req.user)){
+    if(((req.params.user === "me" || req.user.id === req.params.user) && (userLoader.check_service_email(req.user) === true)) || userLoader.has_staff_permission(req.user) === true){
         User.findById(requestedUser)
             .then(user => {
                 if(user){
