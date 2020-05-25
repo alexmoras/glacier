@@ -27,12 +27,12 @@ script:
 - npm test
 deploy:
 - provider: script
-  script: bash build-dev.sh
+  script: sh $TRAVIS_BUILD_DIR/build-dev.sh
   skip_cleanup: true
   on:
     branch: development
 - provider: script
-  script: bash build-staging.sh
+  script: sh $TRAVIS_BUILD_DIR/build-staging.sh
   skip_cleanup: true
   on:
     branch: staging
