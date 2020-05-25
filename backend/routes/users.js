@@ -6,12 +6,41 @@ const responder = require('../helpers/responder');
 const ServiceUser = require('../models/service-user');
 const IceUser = require('../models/ice-user');
 
-/*
-GET
-    /me - returns ice/service profile for logged in user
-    /:user - return ice/service profile for specified user
 
- */
+router.get('/', (req, res, next) => {
+    if(userLoader.has_permission(req.user) === false){
+        let err = new Error("Unauthorized: User " + req.user.id + " attempted to access a resource they do not have access to.");
+        err.status = 401;
+        next(err);
+    } else {
+        let query = {};
+        if(req.query.forename){
+            query.forename = req.query.forename;
+        }
+        if(req.query.surname){
+            query.surname = req.query.surname;
+        }
+        if(req.query.dob){
+            query.dob = req.query.dob;
+        }
+        if(req.query.phone){
+            query.phone = req.query.phone;
+        }
+        if(req.query.id){
+            query["idNumber.value"] = req.query.id;
+        }
+        console.log(query);
+        IceUser.find(query)
+            .then(users => {
+                if(!users){
+                    users = {};
+                }
+                responder.success(res, 200, 200, users);
+            })
+            .catch(next);
+    }
+});
+
 
 router.get('/:user', (req, res, next) => {
     let requestedUser;
@@ -43,7 +72,7 @@ router.get('/:user', (req, res, next) => {
                 next(err);
             });
     } else {
-        let err = new Error("Unauthorized: User " + req.user + " attempted to access a resource " + req.params.user + " they do not have access to.");
+        let err = new Error("Unauthorized: User " + req.user.id + " attempted to access a resource " + req.params.user + " they do not have access to.");
         err.status = 401;
         next(err);
     }
@@ -86,7 +115,7 @@ router.put('/:user/ice', (req, res, next) => {
                 next(err);
             });
     } else {
-        let err = new Error("Unauthorized: User " + req.user + " attempted to access a resource " + req.params.user + " they do not have access to.");
+        let err = new Error("Unauthorized: User " + req.user.id + " attempted to access a resource " + req.params.user + " they do not have access to.");
         err.status = 401;
         next(err);
     }
@@ -129,7 +158,7 @@ router.put('/:user/service', (req, res, next) => {
                 next(err);
             });
     } else {
-        let err = new Error("Unauthorized: User " + req.user + " attempted to access a resource " + req.params.user + " they do not have access to.");
+        let err = new Error("Unauthorized: User " + req.user.id + " attempted to access a resource " + req.params.user + " they do not have access to.");
         err.status = 401;
         next(err);
     }
