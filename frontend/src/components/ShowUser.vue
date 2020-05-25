@@ -2,8 +2,11 @@
     <b-container fluid="" id="user-container">
         <b-card id="details-container" no-body>
             <b-list-group flush>
-                <b-container fluid="">
-                    <b-button class="float-right" variant="secondary" v-if="edit === true" @click="editUser" squared>Edit <font-awesome-icon :icon="['far', 'edit']"></font-awesome-icon></b-button>
+                <b-container fluid="" v-if="closeButton === true">
+                    <b-button class="float-right" variant="secondary" @click="onClose" squared>Close</b-button>
+                </b-container>
+                <b-container fluid="" v-if="edit === true">
+                    <b-button class="float-right" variant="secondary" @click="editUser" squared>Edit <font-awesome-icon :icon="['far', 'edit']"></font-awesome-icon></b-button>
                 </b-container>
                 <b-list-group-item>
                     <b-card-body class="text-center">
@@ -109,7 +112,7 @@
     export default {
         name: "ShowUser",
         components: {},
-        props: ["userParam", "user", "edit"],
+        props: ["userParam", "user", "edit", "closeButton"],
         data() {
             return {
                 loaded: false,
@@ -164,6 +167,9 @@
             },
             editUser(){
                 this.$emit('editUser', true);
+            },
+            onClose(){
+                this.$emit('close', true);
             }
         },
         computed: {
