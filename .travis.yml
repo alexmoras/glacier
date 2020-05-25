@@ -14,10 +14,15 @@ env:
   - secure: jWyIicVpo9ewOm243abQZvcOiOyjdftUKfY7JBi0Vi9W40tQ0pucMjehy2hPvXlcu+DxNpOMRh7cTWc/jKJJTOx980bekrBK7eQB8avCwS0aZWG/a3pyOs0aEVYBTk2Y+ZrYjdZ52+sF46HsTenwAfr6/TSZNuBUobu7o+3NVqgPGI/Bw8kmO5TFGg++CXaKvrhCZNN58ihUgabMHZ1B0FQdFMSXSAjicAEO/vs0FeoOFSb7vBumY2ePmE8LQCSQB+f2CdnZDrLyiPRSJkMiqziXGTWaM9wRCBn3EmjAI1OX1XOiyXmU2hTrP261P0vgWe867ZiDpXdrcdcgayy5OrK9xniVFosk0gOUAMUxsHbXv9IwxNVCXXmnggvH4EWxZqy6FNhCle0VDl3t90DCIfLLRRe5GlyiepYMY9u//0WKQnCjrb68oW0cKpwNXO0HsaOc32rsd3Hh2iB8D2k466F6ZXfNLJbhTM11CFQSpzM2Gamo0bWpzMDpvILRIjcTGOE49SlF/SqGBd+T5DTdRFPA2hkEGvvTvkyO7CiScvbG9OeNS23BvBVpmHHrUbHhPa9lyUx8Bvf24dRCCX78+PYT9d/oh37eYrhj2TTfCtq/NRg+lIj7pu5flY6wCsLICtET/tPdF15QabqodCdxgiblbLX8kew8B+cjrFQH0YY=
 branches:
   only:
-    - master
-    - staging
+  - master
+  - staging
+  - development
 before_install:
-- npm i -g npm@version-number
+- cd $TRAVIS_BUILD_DIR/backend
+- npm install --save-dev
+script:
+- cd $TRAVIS_BUILD_DIR/backend
+- npm test
 addons:
   hosts:
   - glacier.alexmoras.com
