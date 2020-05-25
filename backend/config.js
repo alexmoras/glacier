@@ -8,6 +8,7 @@ module.exports = {
         "police.uk",
         "nhs.uk"
     ],
+    api_port: process.env.API_PORT || 3000,
     mail_user: process.env.MAIL_USER || '',
     mail_pass: process.env.MAIL_PASS || '',
     mail_host: process.env.MAIL_HOST || '',
