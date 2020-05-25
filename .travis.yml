@@ -27,12 +27,12 @@ script:
 - npm test
 deploy:
 - provider: script
-  script: build-dev.sh
+  script: bash build-dev.sh
   skip_cleanup: true
   on:
     branch: development
 - provider: script
-  script: build-staging.sh
+  script: bash build-staging.sh
   skip_cleanup: true
   on:
     branch: staging
