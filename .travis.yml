@@ -28,10 +28,12 @@ script:
 deploy:
 - provider: script
   script: build-dev.sh
+  skip_cleanup: true
   on:
     branch: development
 - provider: script
   script: build-staging.sh
+  skip_cleanup: true
   on:
     branch: staging
 addons:
