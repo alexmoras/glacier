@@ -95,14 +95,16 @@
             this.loaded = false;
             this.getUser()
             .then(() => {
-                this.showUser();
+                if(this.user.ice === null || this.user.ice === undefined){
+                    this.editUser();
+                } else {
+                    this.showUser();
+                }
             })
             .catch(() => {
                 this.$router.push("/login");
             })
-            if(this.user.forename === null || this.user.forename === ''){
-                // Get-started Wizard
-            }
+
         }
     }
 </script>
