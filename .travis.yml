@@ -20,8 +20,6 @@ branches:
 before_install:
 - cd $TRAVIS_BUILD_DIR/backend
 - npm install --save-dev
-- cd $TRAVIS_BUILD_DIR/frontend
-- npm install --save-dev
 script:
 - cd $TRAVIS_BUILD_DIR/backend
 - npm test
