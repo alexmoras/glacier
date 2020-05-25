@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div class="footer-spacing">
         <footer class="footer fixed-bottom">
             <b-container fluid="lg">
                 <span class="text-muted float-left">
@@ -29,6 +29,9 @@
 </script>
 
 <style scoped>
+    .footer-spacing{
+        margin-top: 75px;
+    }
     .footer {
         width: 100%;
         height: 60px;
