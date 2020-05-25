@@ -29,7 +29,6 @@ import HomePage from '@/pages/HomePage';
 import AppPage from '@/pages/AppPage';
 import LoginPage from "./pages/LoginPage";
 import TokenPage from "./pages/TokenPage";
-import ServiceApp from '@/pages/AppPage/ServiceApp';
 
 
 // Here we go... setting up the main stuff now!
@@ -48,8 +47,7 @@ const router = new VueRouter({
     { path: '/', component: HomePage},
     { path: '/app', component: AppPage },
     { path: '/login', component: LoginPage },
-    { path: '/login/:token', component: TokenPage },
-    { path: '/service', component: ServiceApp }
+    { path: '/login/:token', component: TokenPage }
   ],
   mode: 'history'
 });
