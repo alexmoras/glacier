@@ -1,9 +1,14 @@
 <template>
     <div>
         <AppNav />
-        <b-container fluid>
-
+        <b-container class="text-center token-container" fluid="lg">
+            <span>
+                <b-spinner variant="success" label="Spinning"></b-spinner>
+            </span>
+            <br>
+            <p>Logging in...</p>
         </b-container>
+        <AppFooter />
     </div>
 </template>
 
@@ -13,9 +18,10 @@
     import axios from "axios";
     import qs from "querystring";
     import config from "../../config";
+    import AppFooter from "../components/layout/AppFooter";
     export default {
         name: "TokenPage",
-        components: {AppNav},
+        components: {AppFooter, AppNav},
         created() {
             let token = this.$route.params.token;
             axios({
@@ -42,5 +48,8 @@
 </script>
 
 <style scoped>
-
+    .token-container{
+        margin-top: 1rem;
+        margin-bottom: 1rem;
+    }
 </style>

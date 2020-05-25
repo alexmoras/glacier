@@ -5,6 +5,7 @@
             <ServiceApp v-if="service" />
             <UserApp v-else />
         </b-container>
+        <AppFooter />
     </div>
 </template>
 
@@ -13,10 +14,11 @@
     import UserApp from "./UserApp/index";
     import ServiceApp from "./ServiceApp/index";
     import JWTManager from "../../components/JWTManager";
+    import AppFooter from "../../components/layout/AppFooter";
 
     export default {
         name: "AppPage",
-        components: {ServiceApp, UserApp, AppNav},
+        components: {AppFooter, ServiceApp, UserApp, AppNav},
         data() {
             return {
                 loggedIn: false,

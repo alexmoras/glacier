@@ -2,5 +2,6 @@ module.exports = {
     url: process.env.VUE_APP_URL || "",
     apiUrl: process.env.VUE_APP_API_URL || "",
     sentry: process.env.VUE_APP_SENTRY || "",
-    recaptcha: process.env.VUE_APP_RECAPTCHA || ""
+    recaptcha: process.env.VUE_APP_RECAPTCHA || "",
+    version: process.env.VUE_APP_VERSION || "Production"
 };

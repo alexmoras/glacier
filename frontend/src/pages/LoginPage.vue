@@ -6,6 +6,7 @@
                 <LoginForm />
             </b-card>
         </b-container>
+        <AppFooter />
     </div>
 </template>
 
@@ -15,9 +16,10 @@
     import axios from "axios";
     import config from "../../config";
     import JWTManager from "../components/JWTManager";
+    import AppFooter from "../components/layout/AppFooter";
     export default {
         name: "LoginPage",
-        components: {LoginForm, AppNav},
+        components: {AppFooter, LoginForm, AppNav},
         data() {
             return {
                 loaded: false

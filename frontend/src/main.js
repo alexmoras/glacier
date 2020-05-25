@@ -25,10 +25,10 @@ library.add(faTimes);
 
 // Import pages/components
 import App from "./App";
-import HomePage from '@/pages/HomePage';
-import AppPage from '@/pages/AppPage';
+import HomePage from './pages/HomePage';
 import LoginPage from "./pages/LoginPage";
 import TokenPage from "./pages/TokenPage";
+import AppPage from '@/pages/AppPage';
 
 
 // Here we go... setting up the main stuff now!
