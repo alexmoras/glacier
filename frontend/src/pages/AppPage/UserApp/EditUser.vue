@@ -265,7 +265,7 @@
         computed: {
         },
         created() {
-            if(this.user != null){
+            if(this.user.ice != null){
                 this.forename = this.user.ice.forename;
                 this.surname = this.user.ice.surname;
                 this.dob = this.user.ice.dob;
@@ -287,7 +287,8 @@
                 }
                 this.loaded = true;
             } else {
-                this.getUser();
+                this.getSelf();
+                this.loaded = true;
             }
         }
     }

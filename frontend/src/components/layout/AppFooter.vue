@@ -6,7 +6,7 @@
                     Copyright Alex Moras 2020.
                 </span>
                 <span class="float-right">
-                    <a href="https://github.com/alexmoras/glacier" target="_blank">Glacier v.{{ version }}.</a>
+                    <a href="https://github.com/alexmoras/glacier" target="_blank">Glacier v{{ version }}.</a>
                 </span>
             </b-container>
         </footer>
