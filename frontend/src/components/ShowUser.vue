@@ -1,5 +1,5 @@
 <template>
-    <b-container fluid="" id="user-container">
+    <div id="user-container">
         <b-card id="details-container" no-body>
             <b-list-group flush>
                 <b-container fluid="" v-if="closeButton === true">
@@ -101,7 +101,7 @@
                 </b-card>
             </b-card-group>
         </b-card>
-    </b-container>
+    </div>
 </template>
 
 <script>
@@ -207,10 +207,6 @@
     .collapsed > .toggled-closed,
     .not-collapsed > .toggled-open {
         display: none;
-    }
-    #user-container{
-        margin-top: 2.0rem;
-        margin-bottom: 4.0rem;
     }
     #container-user-deck{
         padding: 1.0rem;

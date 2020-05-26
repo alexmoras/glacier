@@ -1,7 +1,8 @@
 <template>
-    <b-container class="contacts-container" v-show="loaded">
+    <div class="contacts-container" v-show="loaded">
         <b-card>
-            <b-button variant="success" class="float-right" @click="addContact"><font-awesome-icon size="lg" :icon="['fal', 'plus']"></font-awesome-icon></b-button>
+            <b-button class="float-right" v-if="closeButton === true" @click="$emit('close', true)" squared>Close</b-button>
+            <b-button variant="success" class="float-right mr-1" @click="addContact"><font-awesome-icon size="lg" :icon="['fal', 'plus']"></font-awesome-icon></b-button>
             <b-card-title>Edit Contacts</b-card-title>
             <b-form>
                 <b-card class="outer-card" id="contacts" v-for="(add, counter) in contacts" v-bind:key="counter" no-body>
@@ -118,7 +119,7 @@
             </b-form>
             <b-button id="button-submit" variant="primary" @click="onSubmit" :disabled="!loaded">Submit</b-button>
         </b-card>
-    </b-container>
+    </div>
 </template>
 
 <script>
@@ -128,7 +129,7 @@
 
     export default {
         name: "EditContact",
-        props: ["user"],
+        props: ["user", "closeButton"],
         data() {
             return {
                 loaded: false,

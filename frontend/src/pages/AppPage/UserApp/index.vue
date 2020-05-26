@@ -7,8 +7,8 @@
                     <b-alert variant="danger" :show="editError">An error occurred whilst saving changes. Please try again.</b-alert>
                 </b-container>
                 <ShowUser v-if="showUserToggle === true" v-bind:userParam="'me'" v-bind:user="user" v-bind:edit="true" v-on:editContacts="editContact" v-on:editUser="editUser" />
-                <EditUser v-if="editUserToggle === true" v-on:success="editComplete($event)" v-bind:user="user" />
-                <EditContact v-if="editContactToggle === true" v-on:success="editComplete($event)" v-bind:user="user" />
+                <EditUser v-if="editUserToggle === true" v-on:success="editComplete($event)" v-bind:user="user" v-bind:closeButton="true" v-on:close="showUser" />
+                <EditContact v-if="editContactToggle === true" v-on:success="editComplete($event)" v-bind:user="user" v-bind:closeButton="true" v-on:close="showUser" />
             </b-col>
         </b-row>
     </b-container>
