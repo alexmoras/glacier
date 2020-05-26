@@ -1,7 +1,7 @@
 <template>
     <div>
         <AppNav />
-        <b-container fluid="">
+        <b-container fluid="lg">
             <ServiceApp v-if="service" />
             <UserApp v-else />
         </b-container>
