@@ -58,7 +58,9 @@
         },
         created() {
             this.loginStatus();
-            this.forename = JWTManager.methods.getJWTPayload().forename;
+            if(JWTManager.methods.getJWTPayload() != null){
+                this.forename = JWTManager.methods.getJWTPayload().forename;
+            }
         }
     }
 </script>

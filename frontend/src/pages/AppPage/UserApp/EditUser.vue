@@ -1,6 +1,7 @@
 <template>
-    <b-container id="profile-container" fluid="" v-show="loaded">
+    <div id="profile-container" v-show="loaded">
         <b-card>
+            <b-button class="float-right" v-if="closeButton === true" @click="$emit('close', true)" squared>Close</b-button>
             <b-card-title>Edit Profile</b-card-title>
             <b-form>
                 <b-list-group flush>
@@ -140,7 +141,7 @@
                 </b-list-group>
             </b-form>
         </b-card>
-    </b-container>
+    </div>
 </template>
 
 <script>
@@ -149,7 +150,7 @@
     import config from "../../../../config";
     export default {
         name: "EditUser",
-        props: ["user"],
+        props: ["user", "closeButton"],
         components: {},
         data() {
             return {

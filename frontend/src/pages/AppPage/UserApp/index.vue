@@ -1,17 +1,13 @@
 <template>
-    <b-container fluid="lg" id="container-user">
-        <b-row>
-            <b-col>
-                <b-container fluid="lg">
-                    <b-alert variant="success" :show="editSuccess">Changes have been saved successfully.</b-alert>
-                    <b-alert variant="danger" :show="editError">An error occurred whilst saving changes. Please try again.</b-alert>
-                </b-container>
-                <ShowUser v-if="showUserToggle === true" v-bind:userParam="'me'" v-bind:user="user" v-bind:edit="true" v-on:editContacts="editContact" v-on:editUser="editUser" />
-                <EditUser v-if="editUserToggle === true" v-on:success="editComplete($event)" v-bind:user="user" />
-                <EditContact v-if="editContactToggle === true" v-on:success="editComplete($event)" v-bind:user="user" />
-            </b-col>
-        </b-row>
-    </b-container>
+    <div id="container-user">
+        <b-container fluid="lg">
+            <b-alert variant="success" :show="editSuccess">Changes have been saved successfully.</b-alert>
+            <b-alert variant="danger" :show="editError">An error occurred whilst saving changes. Please try again.</b-alert>
+        </b-container>
+        <ShowUser v-if="showUserToggle === true" v-bind:userParam="'me'" v-bind:user="user" v-bind:edit="true" v-on:editContacts="editContact" v-on:editUser="editUser" />
+        <EditUser v-if="editUserToggle === true" v-on:success="editComplete($event)" v-bind:user="user" v-bind:closeButton="true" v-on:close="showUser" />
+        <EditContact v-if="editContactToggle === true" v-on:success="editComplete($event)" v-bind:user="user" v-bind:closeButton="true" v-on:close="showUser" />
+    </div>
 </template>
 
 <script>
