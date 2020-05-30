@@ -8,14 +8,17 @@ function generate(user) {
         iss: config.jwt_issuer,
         expiresIn: config.jwt_exp, //expiration.hours(config.jwt.expiration),
         email: user.email,
-        permission: {}
+        permissions: {}
 
     };
+    if(userLoader.user_permission(user) === true){
+        json.permissions.user = true;
+    }
     if(userLoader.check_service_email(user) === true){
-        json.permission.service = true;
+        json.permissions.service = true;
     }
     if(userLoader.has_staff_permission(user) === true){
-        json.permission.staff = true;
+        json.permissions.staff = true;
     }
     return jwt.sign(json, config.jwt_private)
 }

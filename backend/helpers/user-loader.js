@@ -28,6 +28,16 @@ async function get_all(user) {
         })
 }
 
+function user_permission(user) {
+    let verified = false;
+    config.user_domains.forEach(domain => {
+        if(user.email.toString().toLowerCase().endsWith(domain.toLowerCase())){
+            verified = true;
+        }
+    })
+    return verified;
+}
+
 function has_permission(user) {
     Organisation.findOne({"domain": config.domain})
         .then(org => {
@@ -88,5 +98,6 @@ module.exports = {
     has_staff_permission : has_staff_permission,
     put_ice : put_ice,
     put_service : put_service,
-    check_service_email : check_service_email
+    check_service_email : check_service_email,
+    user_permission : user_permission
 }

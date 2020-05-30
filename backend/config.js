@@ -4,9 +4,14 @@ module.exports = {
     jwt_issuer: "glacier.alexmoras.com",
     jwt_exp: "24h",
     magic_link_exp: 24,
+    user_domains: [
+        "swansea.ac.uk",
+        process.env.ADMIN_EMAIL
+    ],
     service_domains: [
         "police.uk",
-        "nhs.uk"
+        "nhs.uk",
+        process.env.ADMIN_EMAIL
     ],
     api_port: process.env.API_PORT || 3000,
     mail_user: process.env.MAIL_USER || '',
